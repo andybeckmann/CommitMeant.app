@@ -1,0 +1,14 @@
+{
+  "goals": [
+    {
+      "description": "1",
+      "completedToday": false,
+      "id": 1
+    },
+    {
+      "description": "again",
+      "completedToday": false,
+      "id": 2
+    }
+  ]
+}
