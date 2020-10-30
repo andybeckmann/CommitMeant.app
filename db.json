@@ -1,14 +1,116 @@
 {
+  "stats": [
+    {
+      "currentStreakDays": 3,
+      "currentRecordDays": 10,
+      "id": 1
+    }
+  ],
   "goals": [
     {
-      "description": "1",
+      "description": "test",
       "completedToday": false,
-      "id": 1
+      "id": 3
     },
     {
-      "description": "again",
+      "description": "asdasd",
       "completedToday": false,
-      "id": 2
+      "id": 6
+    }
+  ],
+  "may2020": [
+    {
+      "score": "zero"
+    },
+    {
+      "score": "fifty"
+    },
+    {
+      "score": "onehundred"
+    },
+    {
+      "score": "onehundred"
+    },
+    {
+      "score": "fifty"
+    },
+    {
+      "score": "fifty"
+    },
+    {
+      "score": "fifty"
+    },
+    {
+      "score": "fifty"
+    },
+    {
+      "score": "onehundred"
+    },
+    {
+      "score": "onehundred"
+    },
+    {
+      "score": "fifty"
+    },
+    {
+      "score": "fifty"
+    },
+    {
+      "score": "onehundred"
+    },
+    {
+      "score": "fifty"
+    },
+    {
+      "score": "zero"
+    },
+    {
+      "score": "onehundred"
+    },
+    {
+      "score": "fifty"
+    },
+    {
+      "score": "zero"
+    },
+    {
+      "score": "fifty"
+    },
+    {
+      "score": "fifty"
+    },
+    {
+      "score": "onehundred"
+    },
+    {
+      "score": "onehundred"
+    },
+    {
+      "score": "fifty"
+    },
+    {
+      "score": "zero"
+    },
+    {
+      "score": "onehundred"
+    },
+    {
+      "score": "fifty"
+    },
+    {
+      "score": "onehundred"
+    },
+    {
+      "score": "zero"
+    },
+    {
+      "score": "fifty"
+    },
+    {
+      "score": "zero"
+    },
+    {
+      "score": "fifty"
     }
   ]
 }

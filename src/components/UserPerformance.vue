@@ -7,24 +7,90 @@
 				<li>SAT</li>
 			</ul>
 		</div>
-		<ul>
-			<li>
-				<h1>April</h1>
-				<div class="user--performance-data">
-					<ul class="user--performance-data-month">
-						<li v-for="node in user.userPerformance.apr" :key="node.score" :class="node.score"></li>
-					</ul>
-				</div>
-			</li>
-			<li>
-				<h1>May</h1>
-				<div class="user--performance-data">
-					<ul class="user--performance-data-month">
-						<li v-for="node in user.userPerformance.may" :key="node.score" :class="node.score"></li>
-					</ul>
-				</div>
-			</li>
-		</ul>
+		<div class="user--performance-data-year">
+			<ul>
+				<li>
+					<h1>Jan</h1>
+					<div class="user--performance-data">
+						<ul class="user--performance-data-month">
+							<li v-for="node in user.userPerformance.jan" :key="node.score" :class="node.score"></li>
+						</ul>
+					</div>
+				</li>
+				<li>
+					<h1>February</h1>
+					<div class="user--performance-data">
+						<ul class="user--performance-data-month">
+							<li v-for="node in user.userPerformance.feb" :key="node.score" :class="node.score"></li>
+						</ul>
+					</div>
+				</li>
+				<li>
+					<h1>March</h1>
+					<div class="user--performance-data">
+						<ul class="user--performance-data-month">
+							<li v-for="node in user.userPerformance.mar" :key="node.score" :class="node.score"></li>
+						</ul>
+					</div>
+				</li>
+				<li>
+					<h1>April</h1>
+					<div class="user--performance-data">
+						<ul class="user--performance-data-month">
+							<li v-for="node in user.userPerformance.apr" :key="node.score" :class="node.score"></li>
+						</ul>
+					</div>
+				</li>
+				<li>
+					<h1>May</h1>
+					<div class="user--performance-data">
+						<ul class="user--performance-data-month">
+							<li v-for="node in user.userPerformance.may" :key="node.score" :class="node.score"></li>
+						</ul>
+					</div>
+				</li>
+				<li>
+					<h1>June</h1>
+					<div class="user--performance-data">
+						<ul class="user--performance-data-month">
+							<li v-for="node in user.userPerformance.jun" :key="node.score" :class="node.score"></li>
+						</ul>
+					</div>
+				</li>
+				<li>
+					<h1>July</h1>
+					<div class="user--performance-data">
+						<ul class="user--performance-data-month">
+							<li v-for="node in user.userPerformance.jul" :key="node.score" :class="node.score"></li>
+						</ul>
+					</div>
+				</li>
+				<li>
+					<h1>August</h1>
+					<div class="user--performance-data">
+						<ul class="user--performance-data-month">
+							<li v-for="node in user.userPerformance.aug" :key="node.score" :class="node.score"></li>
+						</ul>
+					</div>
+				</li>
+				<li>
+					<h1>September</h1>
+					<div class="user--performance-data">
+						<ul class="user--performance-data-month">
+							<li v-for="node in user.userPerformance.sep" :key="node.score" :class="node.score"></li>
+						</ul>
+					</div>
+				</li>
+				<li>
+					<h1>October</h1>
+					<div class="user--performance-data">
+						<ul class="user--performance-data-month">
+							<li v-for="node in user.userPerformance.oct" :key="node.score" :class="node.score"></li>
+						</ul>
+					</div>
+				</li>
+			</ul>
+		</div>
 	</div>
 	<div class="user--view-history">
 		<ul>
@@ -44,8 +110,272 @@
 		data() {
 			return {
 				user: {
-					userPerformance: { 
+					userPerformance: {
+						jan: [
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' },
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' }
+						],
+						feb: [
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' },
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' }
+						],
+						mar: [
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' },
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' }
+						], 
 						apr: [
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' },
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' }
+						],
+						may: [
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' },
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' }
+						],
+						jun: [
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' },
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' }
+						],
+						jul: [
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' },
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' }
+						],
+						aug: [
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' },
+							{ score: 'zero' }, 
+							{ score: 'zero' },
+							{ score: 'zero' }
+						],
+						sep: [
 							{ score: 'fifty' }, 
 							{ score: 'fifty' }, 
 							{ score: 'onehundred' }, 
@@ -78,39 +408,39 @@
 							{ score: 'zero' },
 							{ score: 'zero' }
 						],
-						may: [
+						oct: [
 							{ score: 'onehundred' }, 
 							{ score: 'onehundred' }, 
+							{ score: 'fifty' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'fifty' }, 
+							{ score: 'zero' }, 
+							{ score: 'fifty' }, 
+							{ score: 'zero' }, 
+							{ score: 'onehundred' }, 
+							{ score: 'onehundred' }, 
+							{ score: 'onehundred' }, 
+							{ score: 'onehundred' }, 
+							{ score: 'fifty' }, 
+							{ score: 'zero' }, 
+							{ score: 'onehundred' }, 
+							{ score: 'onehundred' }, 
+							{ score: 'zero' }, 
+							{ score: 'onehundred' }, 
+							{ score: 'zero' }, 
+							{ score: 'zero' }, 
+							{ score: 'onehundred' }, 
+							{ score: 'zero' }, 
 							{ score: 'fifty' }, 
 							{ score: 'onehundred' }, 
 							{ score: 'zero' }, 
 							{ score: 'onehundred' }, 
 							{ score: 'fifty' }, 
 							{ score: 'onehundred' }, 
-							{ score: 'zero' },
-							{ score: 'zero' }, 
-							{ score: 'onehundred' }, 
-							{ score: 'fifty' }, 
-							{ score: 'onehundred' }, 
-							{ score: 'onehundred' }, 
-							{ score: 'onehundred' }, 
-							{ score: 'onehundred' }, 
-							{ score: 'zero' },
-							{ score: 'fifty' },
 							{ score: 'onehundred' },
-							{ score: 'onehundred' },
-							{ score: 'fifty' },
-							{ score: 'fifty' },
-							{ score: 'onehundred' },
-							{ score: 'onehundred' },
-							{ score: 'fifty' },
-							{ score: 'onehundred' },
-							{ score: 'zero' },
-							{ score: 'zero' },
-							{ score: 'fifty' },
-							{ score: 'fifty' },
 							{ score: 'onehundred' }
-						]
+						],
 					}
 				}
 			}
@@ -125,12 +455,17 @@
 		border: 1px solid #ccc;
 		border-radius: 15px 15px 0 0;
 		display: flex;
+		position: relative;
 
 		ul {
 			margin: 0;
 			padding: 0;
 			list-style: none;
 			display: flex;
+			align-items: right;
+			padding-left: 60px;
+			overflow-x: scroll;
+			justify-content: right;
 
 			li {
 				margin-right: 15px;
@@ -144,10 +479,13 @@
 
 		.user--performance-day-indicators ul {
 			display: flex;
+			flex-start: flex-end;
 			flex-flow: column;
-			margin-top: 48px;
-			margin-right: 15px;
+			padding: 48px 18px 5px;
 			font-size: 14px;
+			position: absolute;
+			left: 0px;
+			background: #fff;
 
 			li:nth-of-type(1) {
 				font-weight: 700;
@@ -166,6 +504,14 @@
 			}
 		}
 
+		.user--performance-data-year {
+			position: relative;
+			width: 280px;
+			height: 235px;
+			overflow: hidden;
+			margin-left: 70px;
+		}
+
 		.user--performance-data {
 			display: flex;
 
@@ -182,7 +528,7 @@
 					width: 25px;
 					height: 25px;
 					background: #fff;
-					border: 4px solid #cccccc;
+					border: 4px dashed #cccccc;
 					border-radius: 25px;
 					margin-right: 1px;
 					margin-bottom: 1px;
@@ -226,13 +572,12 @@
 			border-radius: 20px;
 			margin-right: 5px;
 			display: inline-block;
-			background: #fff;
-			color: #333;
+			color: rgba(255, 255, 255,0.5);
 			font-size: 16px;
 			border: 0;
+			font-weight: bold;
 
 			&.active {
-				font-weight: bold;
 				padding: 7px 12px;
 				border: 3px solid #fff;
 				background: transparent;

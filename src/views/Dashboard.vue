@@ -11,9 +11,11 @@
 		<div class="user--goals">
 			<ul>
 				<li v-for="(goal, index) in goals" :key="goal.id" :index="index" ref="goal" :class="{ 'completed' : goal.completedToday }">
-					<button @click="goal.completedToday = !goal.completedToday" :class="{ 'completed' : goal.completedToday }"></button>
-					{{goal.description}}
-					<button @click="deleteGoal(goal.id)" :data-key="goal" class="delete"></button>
+					<div class="user--goals-item">
+						<button @click="toggleGoalStatus(goals, goal.id, goal.description, goal.completedToday)" :class="{ 'completed' : goal.completedToday }"></button>
+						{{goal.description}}
+						<button @click="deleteGoal(goal.id)" :data-key="goal" class="delete"></button>
+					</div>
 				</li>
 			</ul>
 		</div>
@@ -24,9 +26,10 @@
 					autofocus
 					placeholder="Set a goal, see it through..."
 					v-model="description"
+					v-on:keyup="enableSubmit"
 					@keyup.enter="addGoal"
 				>
-				<button @click="addGoal">+</button>
+				<button @click="addGoal" :disabled="isAddGoalButtonDisabled">+</button>
 			</div>
 			<div class="user--add-goal-overlay" @click="closeForm">
 			</div>
@@ -54,7 +57,7 @@
 
 	// Database
 	import axios from 'axios'
-	const database = 'http://localhost:3000/goals'
+	const database = 'http://localhost:3000'
 
 	export default {
 
@@ -71,7 +74,7 @@
 		methods: {
 			async getGoals() {
 				try {
-					const res = await axios.get(database)
+					const res = await axios.get(database + '/goals')
 					this.goals = res.data
 				} catch(e) {
 					console.error(e)
@@ -80,7 +83,7 @@
 
 			addGoal() {
 				try {
-					const res = axios.post(database, { description: this.description, completedToday: false })
+					const res = axios.post(database + '/goals', { description: this.description, completedToday: false })
 					this.goals = [this.goals, res.data]
 				} catch(e) {
 					console.error(e)
@@ -93,7 +96,7 @@
 
 			deleteGoal(id) {
 				try {
-					axios.delete(database + '/' + id)
+					axios.delete(database + '/goals/' + id)
 						.then(() => {
 							this.getGoals()
 						})
@@ -102,9 +105,26 @@
 				}
 			},
 
+			toggleGoalStatus(goals, id, description, completedToday) {
+				try {
+					axios.put(database + '/goals/' + id, { description: description, completedToday: !completedToday })
+						.then(() => {
+							this.getGoals()
+						})
+				} catch(e) {
+					console.error(e)
+				} finally {
+					this.getGoals()
+				}
+			},
+
 			openForm() {
 				this.isAddGoalButtonPressed = !this.isAddGoalButtonPressed
 				this.isAddGoalFormVisible = !this.isAddGoalFormVisible
+			},
+
+			enableSubmit() {
+				this.isAddGoalButtonDisabled = false;
 			},
 
 			closeForm() {
@@ -121,6 +141,8 @@
 			return {
 				goals: [],
 				isAddGoalFormVisible: false,
+				isAddGoalFormFilled: false,
+				isAddGoalButtonDisabled: true,
 				label: 'Add Goal',
 				goal: {
 					description: '',
@@ -197,15 +219,32 @@
 			overflow: hidden;
 
 			li {
-				color: #fff;
-				font-size: 18px;
-				padding: 15px;
-				width: 100%;
-				border-bottom: 1px solid rgba(255,255,255,.4);
 				animation: completedTask 1.5s infinite;
-				position: relative;
 
-				&:first-of-type{
+				.user--goals-item {
+					color: #fff;
+					font-size: 18px;
+					width: 100%;
+					border-bottom: 1px solid rgba(255,255,255,.4);
+					position: relative;
+					height: 0;
+					padding: 0 15px;
+					overflow: hidden;
+					animation: .15s goalItemSlideDown linear forwards
+				}
+
+				@keyframes goalItemSlideDown {
+					0% {
+						height: 0;
+						padding: 0 15px;
+					}
+					100% {
+						height: 55px;
+						padding: 15px;
+					}
+				}
+
+				&:first-of-type {
 					border-radius: 15px 15px 0 0;
 					animation-delay: 0s;
 				}
@@ -246,7 +285,7 @@
 					animation-delay: .9s;
 				}
 
-				&:last-of-type{
+				&:last-of-type {
 					border-bottom: none;
 					border-radius: 0 0 15px 15px;
 				}
@@ -255,7 +294,7 @@
 					background: none;
 					animation: none;
 				}
-
+ 
 				@keyframes completedTask {
 					0% {
 						background: #9703fa;
