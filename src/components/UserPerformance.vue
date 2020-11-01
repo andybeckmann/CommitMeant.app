@@ -7,443 +7,84 @@
 				<li>SAT</li>
 			</ul>
 		</div>
-		<div class="user--performance-data-year">
-			<ul>
-				<li>
-					<h1>Jan</h1>
-					<div class="user--performance-data">
-						<ul class="user--performance-data-month">
-							<li v-for="node in user.userPerformance.jan" :key="node.score" :class="node.score"></li>
-						</ul>
-					</div>
-				</li>
-				<li>
-					<h1>February</h1>
-					<div class="user--performance-data">
-						<ul class="user--performance-data-month">
-							<li v-for="node in user.userPerformance.feb" :key="node.score" :class="node.score"></li>
-						</ul>
-					</div>
-				</li>
-				<li>
-					<h1>March</h1>
-					<div class="user--performance-data">
-						<ul class="user--performance-data-month">
-							<li v-for="node in user.userPerformance.mar" :key="node.score" :class="node.score"></li>
-						</ul>
-					</div>
-				</li>
-				<li>
-					<h1>April</h1>
-					<div class="user--performance-data">
-						<ul class="user--performance-data-month">
-							<li v-for="node in user.userPerformance.apr" :key="node.score" :class="node.score"></li>
-						</ul>
-					</div>
-				</li>
-				<li>
-					<h1>May</h1>
-					<div class="user--performance-data">
-						<ul class="user--performance-data-month">
-							<li v-for="node in user.userPerformance.may" :key="node.score" :class="node.score"></li>
-						</ul>
-					</div>
-				</li>
-				<li>
-					<h1>June</h1>
-					<div class="user--performance-data">
-						<ul class="user--performance-data-month">
-							<li v-for="node in user.userPerformance.jun" :key="node.score" :class="node.score"></li>
-						</ul>
-					</div>
-				</li>
-				<li>
-					<h1>July</h1>
-					<div class="user--performance-data">
-						<ul class="user--performance-data-month">
-							<li v-for="node in user.userPerformance.jul" :key="node.score" :class="node.score"></li>
-						</ul>
-					</div>
-				</li>
-				<li>
-					<h1>August</h1>
-					<div class="user--performance-data">
-						<ul class="user--performance-data-month">
-							<li v-for="node in user.userPerformance.aug" :key="node.score" :class="node.score"></li>
-						</ul>
-					</div>
-				</li>
-				<li>
-					<h1>September</h1>
-					<div class="user--performance-data">
-						<ul class="user--performance-data-month">
-							<li v-for="node in user.userPerformance.sep" :key="node.score" :class="node.score"></li>
-						</ul>
-					</div>
-				</li>
-				<li>
-					<h1>October</h1>
-					<div class="user--performance-data">
-						<ul class="user--performance-data-month">
-							<li v-for="node in user.userPerformance.oct" :key="node.score" :class="node.score"></li>
-						</ul>
-					</div>
-				</li>
-			</ul>
-		</div>
+		<ul class="user--performance-years">
+			<li class="user--performance-year" v-for="(year, index) in performance.years" :key="year.year" :index="index" :class="{ 'show' : year.isSelectedYear }">
+				<ul :id="year.year">
+					<li v-for="month in year.months.slice().reverse()" :key="month.name">
+						<h1>{{ month.name }}</h1>
+						<div class="user--performance-data">
+							<ul class="user--performance-data-month">
+								<li v-for="day in month.days" :key="day.id" :class="day.score"></li>
+							</ul>
+						</div>
+					</li>
+				</ul>
+			</li>
+		</ul>
 	</div>
 	<div class="user--view-history">
 		<ul>
-			<li>
-				<a href="#" class="user--view-history-year active">2020</a>
-			</li>
-			<li>
-				<a href="#" class="user--view-history-year">2019</a>
+			<li class="user--performance-year" v-for="(year, index) in performance.years" :key="year.year" :index="index">
+				<a href="#" :class="[{ 'active ' : year.isSelectedYear }, 'user--view-history-year']" :data-key="year" @click="selectYear(performance.years, year)">{{ year.year }}</a>
 			</li>
 		</ul>
 	</div>
 </template>
 
 <script>
+	import axios from 'axios'
+	const database = 'http://localhost:3000'
+
 	export default {
 		name: 'UserPerformance',
+		methods: {
+			async getPerformance() {
+				try {
+					const res = await axios.get(database + '/performance')
+					this.performance.years = res.data
+					console.log(performance.oct2020)
+				} catch(e) {
+					console.error(e)
+				}
+			},
+
+			selectYear(years, year) {
+				for (let i=0; i < this.performance.years.length; i++) {
+					years[i].isSelectedYear = false
+				}
+				year.isSelectedYear = true
+			}
+		},
 		data() {
 			return {
-				user: {
-					userPerformance: {
-						jan: [
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' },
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' }
-						],
-						feb: [
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' },
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' }
-						],
-						mar: [
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' },
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' }
-						], 
-						apr: [
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' },
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' }
-						],
-						may: [
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' },
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' }
-						],
-						jun: [
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' },
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' }
-						],
-						jul: [
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' },
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' }
-						],
-						aug: [
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' },
-							{ score: 'zero' }, 
-							{ score: 'zero' },
-							{ score: 'zero' }
-						],
-						sep: [
-							{ score: 'fifty' }, 
-							{ score: 'fifty' }, 
-							{ score: 'onehundred' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'fifty' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'onehundred' }, 
-							{ score: 'fifty' }, 
-							{ score: 'onehundred' }, 
-							{ score: 'onehundred' }, 
-							{ score: 'fifty' }, 
-							{ score: 'fifty' }, 
-							{ score: 'onehundred' }, 
-							{ score: 'onehundred' }, 
-							{ score: 'fifty' }, 
-							{ score: 'onehundred' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'onehundred' }, 
-							{ score: 'fifty' }, 
-							{ score: 'fifty' }, 
-							{ score: 'onehundred' }, 
-							{ score: 'zero' }, 
-							{ score: 'onehundred' }, 
-							{ score: 'fifty' }, 
-							{ score: 'onehundred' }, 
-							{ score: 'zero' },
-							{ score: 'zero' }
-						],
-						oct: [
-							{ score: 'onehundred' }, 
-							{ score: 'onehundred' }, 
-							{ score: 'fifty' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'fifty' }, 
-							{ score: 'zero' }, 
-							{ score: 'fifty' }, 
-							{ score: 'zero' }, 
-							{ score: 'onehundred' }, 
-							{ score: 'onehundred' }, 
-							{ score: 'onehundred' }, 
-							{ score: 'onehundred' }, 
-							{ score: 'fifty' }, 
-							{ score: 'zero' }, 
-							{ score: 'onehundred' }, 
-							{ score: 'onehundred' }, 
-							{ score: 'zero' }, 
-							{ score: 'onehundred' }, 
-							{ score: 'zero' }, 
-							{ score: 'zero' }, 
-							{ score: 'onehundred' }, 
-							{ score: 'zero' }, 
-							{ score: 'fifty' }, 
-							{ score: 'onehundred' }, 
-							{ score: 'zero' }, 
-							{ score: 'onehundred' }, 
-							{ score: 'fifty' }, 
-							{ score: 'onehundred' }, 
-							{ score: 'onehundred' },
-							{ score: 'onehundred' }
-						],
+				performance: [
+					{ 
+						"years": [
+							{
+								"year": "",
+								"isSelectedYear": false,
+								"months": [
+									{
+										"name": "",
+										"days": [
+											{
+												"date": "",
+												"totalGoals": "",
+												"totalGoalsCompleted": "",
+												"score": "",
+												"id": null
+											}
+										]
+									}
+								]
+							}
+						] 
 					}
-				}
+				]
 			}
+		},
+		created() {
+			this.getPerformance()
 		}
 	}
 </script>
@@ -463,9 +104,10 @@
 			list-style: none;
 			display: flex;
 			align-items: right;
-			padding-left: 60px;
+			padding-left: 10px;
 			overflow-x: scroll;
 			justify-content: right;
+			flex-flow: row-reverse nowrap;
 
 			li {
 				margin-right: 15px;
@@ -481,7 +123,7 @@
 			display: flex;
 			flex-start: flex-end;
 			flex-flow: column;
-			padding: 48px 18px 5px;
+			padding: 48px 15px 5px 18px;
 			font-size: 14px;
 			position: absolute;
 			left: 0px;
@@ -504,12 +146,18 @@
 			}
 		}
 
-		.user--performance-data-year {
+		.user--performance-year {
 			position: relative;
-			width: 280px;
+			width: 325px;
 			height: 235px;
 			overflow: hidden;
-			margin-left: 70px;
+			margin-left: 50px;
+			margin-right: 0;
+			display: none;
+
+			&.show {
+				display: flex;
+			}
 		}
 
 		.user--performance-data {
@@ -564,12 +212,14 @@
 			margin: 0;
 			padding: 0;
 			display: flex;
+			flex-flow: row-reverse;
+			justify-content: flex-end;
 		}
 
 		.user--view-history-year {
 			text-decoration: none;
 			padding: 10px 15px;
-			border-radius: 20px;
+			border-radius: 0 20px 20px 20px;
 			margin-right: 5px;
 			display: inline-block;
 			color: rgba(255, 255, 255,0.5);

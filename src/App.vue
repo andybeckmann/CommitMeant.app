@@ -1,5 +1,7 @@
 <template>
-	<router-view/>
+	<div class="app--view">
+		<router-view/>
+	</div>
 </template>
 
 <script>
@@ -21,10 +23,15 @@
 		padding: 0;
 		margin: 0;
 		font-family: sans-serif;
+		background: #9703fa;
 	}
 
 	img {
 		max-width: 100%;
 		height: auto;
+	}
+
+	.app--view {
+		background: #fff;
 	}
 </style>

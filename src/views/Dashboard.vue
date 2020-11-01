@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="app--main">
 		<div class="app--menu-bar">
 			<AppNavigation />
 			<AppLogo />
@@ -160,7 +160,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		border-bottom: 1px solid #ccc;
+		border-bottom: 1px solid #111;
 	}
 
 	.app--add-goal {
@@ -177,7 +177,7 @@
 		width: 55px;
 		height: 55px;
 		border: 0;
-		border-left: 1px solid #ccc;
+		border-left: 1px solid #111;
 		cursor: pointer;
 
 		&.active {

@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="app--main">
 		<div class="app--menu-bar">
 			<AppNavigation />
 			<AppLogo />

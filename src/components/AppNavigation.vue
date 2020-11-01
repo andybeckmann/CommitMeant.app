@@ -54,12 +54,14 @@
 		outline: none;
 		border-radius: 0;
 		cursor: pointer;
+		border-right: 1px solid #111;
 
 		.app--main-menu-toggle-top {
 			height: 5px;
 			width: 25px;
 			background: #fff;
 			margin-bottom: 3px;
+			transition: .15s ease-out transform, .15s ease-out bottom;
 		}
 
 		.app--main-menu-toggle-middle {
@@ -67,17 +69,34 @@
 			width: 25px;
 			background: #fff;
 			margin-bottom: 3px;
+			transition: .15s ease-out opacity;
 		}
 
 		.app--main-menu-toggle-bottom {
 			height: 5px;
 			width: 25px;
 			background: #fff;
+			transition: .15s ease-out transform, .15s ease-out top;
 		}
 
 		&.active {
-			background: #999;
-			border-bottom: 1px solid #999;
+			background: #111;
+
+			.app--main-menu-toggle-top {
+				transform: rotate(-45deg);
+				bottom: -4px;
+				position: relative;
+			}
+
+			.app--main-menu-toggle-middle {
+				display: none;
+			}
+
+			.app--main-menu-toggle-bottom {
+				transform: rotate(45deg);
+				top: -4px;
+				position: relative;
+			}
 		}
 	}
 	.app--main-menu {
