@@ -42,7 +42,6 @@
 				try {
 					const res = await axios.get(database + '/performance')
 					this.performance.years = res.data
-					console.log(performance.oct2020)
 				} catch(e) {
 					console.error(e)
 				}
