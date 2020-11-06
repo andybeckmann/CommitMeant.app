@@ -3,8 +3,28 @@
 		<div class="app--menu-bar">
 			<AppNavigation />
 			<AppLogo />
+			<button @click="openForm" class="app--add-goal disabled" :class="{ 'active' : isAddGoalButtonPressed }">
+				<span></span>
+			</button>
 		</div>
-		<p>Settings</p>
+		<div class="user--settings">
+			<div class="user--settings-setting">
+				<label>Avatar</label>
+				<input type="text" placeholder="picture.jpg">
+			</div>
+			<div class="user--settings-setting">
+				<label>Email</label>
+				<input type="text" placeholder="contact@andybeckmann.com">
+			</div>
+			<div class="user--settings-setting">
+				<label>Password</label>
+				<input type="password" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;">
+			</div>
+			<div class="user--settings-setting">
+				<input type="checkbox" role="checkbox" name="checkbox-option-one" id="checkbox-option-one" checked="" aria-checked="true">
+				<label for="checkbox-option-one">Flashing Goals</label>
+			</div>
+		</div>
 		<AppFooter />
 	</div>
 </template>

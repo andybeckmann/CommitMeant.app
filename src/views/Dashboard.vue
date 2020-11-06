@@ -4,37 +4,42 @@
 			<AppNavigation />
 			<AppLogo />
 			<button @click="openForm" class="app--add-goal" :class="{ 'active' : isAddGoalButtonPressed }">
-				<span>+</span>
+				<div class="icon--toggle">
+					<div class="app--add-goal-toggle-top"></div>
+					<div class="app--add-goal-toggle-bottom"></div>
+				</div>
 			</button>
 		</div>
-		<UserHeader />
-		<div class="user--goals">
-			<ul>
-				<li v-for="(goal, index) in goals" :key="goal.id" :index="index" ref="goal" :class="{ 'completed' : goal.completedToday }">
-					<div class="user--goals-item">
-						<button @click="toggleGoalStatus(goals, goal.id, goal.description, goal.completedToday)" :class="{ 'completed' : goal.completedToday }"></button>
-						{{goal.description}}
-						<button @click="deleteGoal(goal.id)" :data-key="goal" class="delete"></button>
-					</div>
-				</li>
-			</ul>
-		</div>
-		<div class="user--add-goal-form" :class="{ 'show' : isAddGoalFormVisible }">
-			<div class="user--add-goal-form-fields">
-				<label>{{ label }}</label>
-				<input
-					autofocus
-					placeholder="Set a goal, see it through..."
-					v-model="description"
-					v-on:keyup="enableSubmit"
-					@keyup.enter="addGoal"
-				>
-				<button @click="addGoal" :disabled="isAddGoalButtonDisabled">+</button>
+		<div class="user">
+			<UserHeader v-bind:score="score" />
+			<div class="user--goals">
+				<ul>
+					<li v-for="(goal, index) in goals" :key="goal.id" :index="index" ref="goal" :class="{ 'completed' : goal.completedToday }">
+						<div class="user--goals-item">
+							<button @click="toggleGoalStatus(goals, goal.id, goal.description, goal.completedToday)" :class="{ 'completed' : goal.completedToday }"></button>
+							{{goal.description}}
+							<button @click="deleteGoal(goal.id)" :data-key="goal" class="delete"></button>
+						</div>
+					</li>
+				</ul>
 			</div>
-			<div class="user--add-goal-overlay" @click="closeForm">
+			<div class="user--add-goal-form" :class="{ 'show' : isAddGoalFormVisible }">
+				<div class="user--add-goal-form-fields">
+					<label>{{ label }}</label>
+					<input
+						autofocus
+						placeholder="Set a goal, see it through..."
+						v-model="description"
+						v-on:keyup="enableSubmit"
+						@keyup.enter="addGoal"
+					>
+					<button @click="addGoal" :disabled="isAddGoalButtonDisabled">+</button>
+				</div>
+				<div class="user--add-goal-overlay" @click="closeForm">
+				</div>
 			</div>
+			<UserPerformance />
 		</div>
-		<UserPerformance />
 		<AppFooter />
 	</div>
 </template>
@@ -71,7 +76,31 @@
 			UserPerformance
 		},
 
+		computed: {
+
+			/**
+			 * Calculates the number of currently completed goals
+			 */
+			calculateTodaysCompletedGoals() {
+
+				let todaysCompletedGoals = 0
+
+				for (let i=0; i < this.goals.length; i++) {
+					if (this.goals[i].completedToday == true) {
+						todaysCompletedGoals += 1
+					}
+				}
+
+				return todaysCompletedGoals
+			}
+
+		},
+
 		methods: {
+
+			/**
+			 * Initializes a get request to database to retreive goals array
+			 */
 			async getGoals() {
 				try {
 					const res = await axios.get(database + '/goals')
@@ -81,6 +110,9 @@
 				}
 			},
 
+			/**
+			 * Initializes a post request to database to push new goal into goals array
+			 */
 			addGoal() {
 				try {
 					const res = axios.post(database + '/goals', { description: this.description, completedToday: false })
@@ -94,6 +126,9 @@
 				}
 			},
 
+			/**
+			 * Creates delete request to database to delete targetd goal.id
+			 */
 			deleteGoal(id) {
 				try {
 					axios.delete(database + '/goals/' + id)
@@ -105,7 +140,63 @@
 				}
 			},
 
+			/**
+			 * Calculates the value to be assigned to this.score
+			 */
+			calculateTodaysScore() {
+
+				this.totalGoals = this.goals.length
+				console.log('todays total goals: ' + this.totalGoals)
+
+				this.totalGoalsCompleted = this.calculateTodaysCompletedGoals + 1
+				console.log('todays total completed goals: ' + this.totalGoalsCompleted)
+
+				let todaysScore = (this.totalGoalsCompleted / this.totalGoals)
+				console.log('todays score value: ' + todaysScore)
+
+				if (todaysScore == 1) {
+					this.score = 'onehundred'
+				} else if (todaysScore <= 1 && todaysScore > 0) {
+					this.score = 'fifty'
+				} else {
+					this.score = 'zero'
+				}
+
+				console.log('todays score class: ' + this.score)
+				console.log('------------------------------------------')
+			},
+
+			/**
+			 * Initializes a push/put request to the database to add/modify a day in the performance array
+			 */
 			toggleGoalStatus(goals, id, description, completedToday) {
+				
+				/*
+
+				const today = new Date() 
+				const todaysDate = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' today.getDate()
+
+				let month = today.getMonth() + 1
+
+				for (let = i; i < month.length; i++) {
+
+					if (month[i].date == todaysDate) {
+
+						// Update todays data
+						axios.put(database + '/' + month + today.getFullYear() + '/' + this.id, { totalGoals: this.totalGoals, totalGoalsCompleted: this.totalGoalsCompleted, score: calculateTodaysCompletedGoalsValue(), id: this.id })
+						
+					} else {
+
+						// Push new day into database
+						axios.push(database + '/' + month + today.getFullYear(), { date: todaysDate, totalGoals: this.totalGoals, totalGoalsCompleted: this.totalGoalsCompleted, score: calculateTodaysCompletedGoalsValue(), id: this.id })
+							.then(() => {
+
+						})
+					}
+				}
+
+				**/
+
 				try {
 					axios.put(database + '/goals/' + id, { description: description, completedToday: !completedToday })
 						.then(() => {
@@ -115,18 +206,30 @@
 					console.error(e)
 				} finally {
 					this.getGoals()
+					this.calculateTodaysScore()
 				}
+
+				//this.calculateTodaysScore()
 			},
 
+			/**
+			 * Toggles isAddGoalButtonPressed and isAddGoalFormVisible between true/false to display form to add a new goal to the goals array
+			 */
 			openForm() {
 				this.isAddGoalButtonPressed = !this.isAddGoalButtonPressed
 				this.isAddGoalFormVisible = !this.isAddGoalFormVisible
 			},
 
+			/**
+			 * Sets isAddGoalButtonDisabled to true after text has been entered and is used to set <button> disabled initially
+			 */
 			enableSubmit() {
 				this.isAddGoalButtonDisabled = false;
 			},
 
+			/**
+			 * 
+			 */
 			closeForm() {
 				this.isAddGoalButtonPressed = !this.isAddGoalButtonPressed
 				this.isAddGoalFormVisible = !this.isAddGoalFormVisible
@@ -140,66 +243,197 @@
 		data() {
 			return {
 				goals: [],
+
 				isAddGoalFormVisible: false,
 				isAddGoalFormFilled: false,
 				isAddGoalButtonDisabled: true,
+				isAddGoalButtonPressed: false,
+
 				label: 'Add Goal',
+				description: '',
 				goal: {
 					description: '',
 					id: null
 				},
-				description: ''
+
+				day: {
+					score: '',
+				},
+
+				score: '',
+
+				performance: [
+					{ 
+						year: '',
+						months: [
+							{ 
+								name: '',
+								days: [
+									{
+										date: '',
+										totalGoals: 0,
+										totalGoalsCompleted: 0,
+										score: 0,
+									}
+								]
+							}
+						]
+					}
+				]
 			}
 		}
 	}
 </script>
 
 <style lang="scss">
+
+	.app--main {
+		padding-top: 56px;
+		background: #eee;
+	}
+
 	.app--menu-bar {
 		background: #fff;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		border-bottom: 1px solid #111;
+		position: fixed;
+		top: 0;
+		width: 100%;
+		z-index: 1;
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 	}
 
 	.app--add-goal {
-		color: #fff;
-		font-size: 35px;
-		text-rendering: optimizeLegibility;
-		-webkit-font-smoothing: antialiased;
-		position: relative;
-		background: #eee;
-		display: flex;
-		color: #e900ff;
-		justify-content: center;
-		align-items: center;
 		width: 55px;
 		height: 55px;
-		border: 0;
-		border-left: 1px solid #111;
+		padding: 15px;
+		background: #e900ff;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		border: none;
+		outline: none;
+		border-radius: 0;
 		cursor: pointer;
 
 		&.active {
 			background: #111;
-			border-left: 1px solid #111;
-			border-bottom: 1px solid #111;
 
-			span {
-				transform: rotate(45deg);
-				font-size: 38px;
-				color: #fff;
+			.icon--toggle {
+				transform: rotate(0);
 			}
+		}
+
+		&.disabled {
+			background: #fff;
 		}
 
 		&:focus {
 			outline: none;
 		}
 
-		span {
+		.icon--toggle {
+			transform: rotate(45deg);
+			transition: .15s ease-out transform;
+		}
+
+		.app--add-goal-toggle-top {
+			transform: rotate(-45deg);
+			bottom: -4px;
 			position: relative;
-			top: -2px;
-			transition: .1s ease-out transform;
+			height: 5px;
+			width: 25px;
+			background: #fff;
+			margin-bottom: 3px;
+			border-radius: 10px;
+		}
+
+		.app--add-goal-toggle-bottom {
+			transform: rotate(45deg);
+			top: -4px;
+			position: relative;
+			height: 5px;
+			width: 25px;
+			background: #fff;
+			margin-bottom: 3px;
+			border-radius: 10px;
+		}
+	}
+
+	.app--add-goal.disabled {
+		background: #fff;
+	}
+
+	.user--settings {
+		padding: 15px; 
+
+		label {
+			font-weight: bold;
+
+			span {
+				color: #9703fa;
+			}
+		}
+
+		input[type=text], input[type=password] {
+			font-size: 20px;
+			margin: 15px 0;
+			display: flex;
+			border: 5px solid #e900ff;
+			padding: 20px;
+			border-radius: 15px;
+			background: #fff;
+			width: 100%;
+
+			&:focus {
+				outline: none;
+				border-color: #9703fa;
+			}
+		}
+
+		input[type=checkbox] {
+			position: absolute;
+			opacity: 0; 
+
+			& + label {
+				position: relative;
+				cursor: pointer;
+				padding: 0;
+				margin-right: 15px;
+				margin-top: 15px;
+			}
+
+			& + label:before {
+				content: '';
+				margin-right: 10px;
+				margin-top: -2px;
+				display: inline-block;
+				vertical-align: text-top;
+				width: 26px;
+				height: 26px;
+				border: 1px solid #ccc;
+				background: #fff;
+				border-radius: 3px;
+			}
+
+			&:hover + label:before {
+				background: #eee;
+			}
+
+			&:checked + label:before {
+				background: #111;
+			}
+		
+			&:checked + label:after {
+				content: '\000D7';
+				color: #fff;
+				position: absolute;
+				left: 8px;
+				top: -2px;
+				font-size: 20px;
+				font-weight: bold;
+			}
 		}
 	}
 
@@ -208,6 +442,7 @@
 		border-radius: 15px;
 		padding: 0;
 		margin: 15px;
+		border-top: 1px solid #eee;
 
 		ul {
 			margin: 0;
@@ -424,6 +659,9 @@
 			position: relative;
 			z-index: 2;
 			font-style: italic;
+			border-radius: 0;
+			display: flex;
+			outline: 0;
 
 			&:focus {
 				outline: none;

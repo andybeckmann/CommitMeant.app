@@ -2,8 +2,7 @@
 	<div class="user--header">
 		<div class="user--header-profile-picture">
 			<img src="../assets/profile-picture.png">
-			<div class="user--header-profile-picture-status">
-			</div>
+			<div class="user--header-profile-picture-status" :class="score"></div>
 		</div>
 		<ul>
 			<li>
@@ -27,6 +26,9 @@
 
 	export default {
 		name: 'UserHeader',
+		props: {
+			score: String
+		},
 		methods: {
 			async getStats() {
 				try {
@@ -41,8 +43,8 @@
 			return {
 				stats: [
 					{ 
-						currentStreakDays: "2",
-						currentRecordDays: "1"
+						currentStreakDays: "",
+						currentRecordDays: ""
 					}
 
 				]
@@ -63,6 +65,7 @@
 		border-radius: 0 15px 15px 0;
 		margin-left: 0;
 		border-left: 0;
+		background: #fff;
 
 		.user--header-profile-picture {
 			max-width: 75px;
@@ -79,6 +82,24 @@
 			position: absolute;
 			top: 24px;
 			right: -17px;
+
+			background: #fff;
+			border: 4px dashed #cccccc;
+			border-radius: 25px;
+			margin-right: 1px;
+			margin-bottom: 1px;
+
+			// 50% Daily Goals Completed
+			&.fifty {
+				background: #bc89df;
+				border: none;
+			}
+
+			// 100% Daily Goals Completed
+			&.onehundred {
+				background: #9403fa;
+				border: none;
+			}
 		}
 
 		ul {
@@ -95,6 +116,7 @@
 				}
 
 				h1 {
+					margin-top: 8px;
 					font-size: 16px;
 					font-weight: 400;
 					text-transform: uppercase;

@@ -96,6 +96,9 @@
 		border-radius: 15px 15px 0 0;
 		display: flex;
 		position: relative;
+		background: #fff;
+		height: 267px;
+		overflow: hidden;
 
 		ul {
 			margin: 0;
@@ -104,7 +107,6 @@
 			display: flex;
 			align-items: right;
 			padding-left: 10px;
-			overflow-x: scroll;
 			justify-content: right;
 			flex-flow: row-reverse nowrap;
 
@@ -147,8 +149,8 @@
 
 		.user--performance-year {
 			position: relative;
-			width: 325px;
-			height: 235px;
+			width: 300px;
+			height: 250px;
 			overflow: hidden;
 			margin-left: 50px;
 			margin-right: 0;
@@ -156,6 +158,10 @@
 
 			&.show {
 				display: flex;
+			}
+
+			> ul {
+				overflow-x: scroll;
 			}
 		}
 
@@ -217,7 +223,7 @@
 
 		.user--view-history-year {
 			text-decoration: none;
-			padding: 10px 15px;
+			padding: 8px 15px 10px;
 			border-radius: 0 20px 20px 20px;
 			margin-right: 5px;
 			display: inline-block;
@@ -227,7 +233,7 @@
 			font-weight: bold;
 
 			&.active {
-				padding: 7px 12px;
+				padding: 5px 12px 7px;
 				border: 3px solid #fff;
 				background: transparent;
 				color: #fff;

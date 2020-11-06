@@ -22,7 +22,7 @@
 	body {
 		padding: 0;
 		margin: 0;
-		font-family: sans-serif;
+		font-family: 'Lato', sans-serif;
 		background: #9703fa;
 	}
 

@@ -9,10 +9,19 @@
 			<div id="app--main-menu" class="app--main-menu" :class="{ 'show' : isMenuVisible }">
 				<ul>
 					<li>
+						<router-link to="/login">Log in</router-link>
+					</li>
+					<li>
+						<router-link to="/signup">Sign up</router-link>
+					</li>
+					<li>
 						<router-link to="/">Dashboard</router-link>
 					</li>
 					<li>
 						<router-link to="/settings">Settings</router-link>
+					</li>
+					<li>
+						<router-link to="/logout">Log out</router-link>
 					</li>
 				</ul>
 				<div class="app--main-menu-overlay">
@@ -29,7 +38,7 @@
 			toggleMenu() {
 				this.isMenuButtonPressed = !this.isMenuButtonPressed
 				this.isMenuVisible = !this.isMenuVisible
-			},
+			}
 		},
 		data() {
 			return {
@@ -45,8 +54,7 @@
 		width: 55px;
 		height: 55px;
 		padding: 15px;
-		background: #e900ff;
-		border-bottom: 1px solid #e900ff;
+		background: #9703fa;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
@@ -54,29 +62,26 @@
 		outline: none;
 		border-radius: 0;
 		cursor: pointer;
-		border-right: 1px solid #111;
 
-		.app--main-menu-toggle-top {
+		div {
 			height: 5px;
 			width: 25px;
 			background: #fff;
 			margin-bottom: 3px;
-			transition: .15s ease-out transform, .15s ease-out bottom;
-		}
+			border-radius: 10px;
 
-		.app--main-menu-toggle-middle {
-			height: 5px;
-			width: 25px;
-			background: #fff;
-			margin-bottom: 3px;
-			transition: .15s ease-out opacity;
-		}
+			&.app--main-menu-toggle-top {
+				transition: .15s ease-out transform, .15s ease-out bottom;
+			}
 
-		.app--main-menu-toggle-bottom {
-			height: 5px;
-			width: 25px;
-			background: #fff;
-			transition: .15s ease-out transform, .15s ease-out top;
+			&.app--main-menu-toggle-middle {
+				transition: .15s ease-out opacity;
+			}
+
+			&.app--main-menu-toggle-bottom {
+				transition: .15s ease-out transform, .15s ease-out top;
+				margin-bottom: 0;
+			}
 		}
 
 		&.active {
@@ -108,9 +113,13 @@
 			display: block;
 
 			ul {
+				background: #eee;
+
 				li {
 					a {
 						animation: .1s menuSlideDown linear forwards;
+						background: #eee;
+						color: #111;
 					}
 
 					@keyframes menuSlideDown {
@@ -159,7 +168,7 @@
 
 		.app--main-menu-overlay {
 			width: 100%;
-			height: 100%;
+			height: 100vh;
 			background: rgba(0, 0, 0, 0.75);
 			backdrop-filter: blur(2px);
 			position: absolute;
