@@ -76,13 +76,9 @@
 		.user--header-profile-picture-status {
 			width: 30px;
 			height: 30px;
-			background: #9403fa;
-			border: 3px solid #fff;
-			border-radius: 25px;
 			position: absolute;
 			top: 24px;
 			right: -17px;
-
 			background: #fff;
 			border: 4px dashed #cccccc;
 			border-radius: 25px;
@@ -93,12 +89,64 @@
 			&.fifty {
 				background: #bc89df;
 				border: none;
+
+				&:before {
+					background: #bc89df;
+					transform: scale(1);
+					opacity: 1;
+					animation: scaleFadeOutFifty .75s linear forwards;
+					width: 30px;
+					height: 30px;
+					position: absolute;
+					top: 0;
+					left: 0;
+					content: '';
+					border-radius: 25px;
+				}
+			}
+
+			@keyframes scaleFadeOutFifty {
+				0% {
+					transform: scale(1);
+					opacity: 1;
+				}
+
+				100% {
+					transform: scale(1.5);
+					opacity: 0;
+				}
 			}
 
 			// 100% Daily Goals Completed
 			&.onehundred {
 				background: #9403fa;
 				border: none;
+
+				&:before {
+					background: #9403fa;
+					transform: scale(1);
+					opacity: 1;
+					animation: scaleFadeOutOnehundred .75s linear forwards;
+					width: 30px;
+					height: 30px;
+					position: absolute;
+					top: 0;
+					left: 0;
+					content: '';
+					border-radius: 25px;
+				}
+			}
+
+			@keyframes scaleFadeOutOnehundred {
+				0% {
+					transform: scale(1);
+					opacity: 1;
+				}
+
+				100% {
+					transform: scale(1.5);
+					opacity: 0;
+				}
 			}
 		}
 
