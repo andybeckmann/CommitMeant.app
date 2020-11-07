@@ -76,30 +76,10 @@
 			UserPerformance
 		},
 
-		computed: {
-
-			/**
-			 * Calculates the number of currently completed goals
-			 */
-			calculateTodaysCompletedGoals() {
-
-				let todaysCompletedGoals = 0
-
-				for (let i=0; i < this.goals.length; i++) {
-					if (this.goals[i].completedToday == true) {
-						todaysCompletedGoals += 1
-					}
-				}
-
-				return todaysCompletedGoals
-			}
-
-		},
-
 		methods: {
 
 			/**
-			 * Initializes a get request to database to retreive goals array
+			 * Initialize a get request to database to retreive goals array
 			 */
 			async getGoals() {
 				try {
@@ -111,7 +91,19 @@
 			},
 
 			/**
-			 * Initializes a post request to database to push new goal into goals array
+			 * Initialize a get request to database to retreive goals array
+			 */
+			async getPerformance() {
+				try {
+					const res = await axios.get(database + '/performance')
+					this.performance = res.data
+				} catch(e) {
+					console.error(e)
+				}
+			},
+
+			/**
+			 * Initialize a post request to database to push new goal into goals array
 			 */
 			addGoal() {
 				try {
@@ -127,7 +119,7 @@
 			},
 
 			/**
-			 * Creates delete request to database to delete targetd goal.id
+			 * Create delete request to database to delete targeted goal.id
 			 */
 			deleteGoal(id) {
 				try {
@@ -141,18 +133,65 @@
 			},
 
 			/**
-			 * Calculates the value to be assigned to this.score
+			 * Check to see if a record for todays performance exists
 			 */
-			calculateTodaysScore() {
+			hasTodayBeenAddedToPerformanceLog(todaysYear, todaysMonth) {
+
+				let hasTodayBeenAdded = false
+
+				for (let year in this.performance) {
+					if (year.year == todaysYear) {
+						for (let month in year) {
+							if(month.month == todaysMonth) {
+								for (let days in month) {
+									for (let day in days) {
+										if (day.date == "2020-10-05") {
+											hasTodayBeenAdded = true
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+
+				return hasTodayBeenAdded
+			},
+
+			/**
+			 * Calculate the number of currently completed goals
+			 */
+			calculateTodaysCompletedGoals(completedToday) {
+
+				let todaysCompletedGoals = 1
+
+
+				for (let i=0; i < this.goals.length; i++) {
+					if (this.goals[i].completedToday == true) {
+						todaysCompletedGoals += 1
+					}
+				}
+
+				if (completedToday) {
+					todaysCompletedGoals -= 2
+				}
+
+				return todaysCompletedGoals
+			},
+
+			/**
+			 * Calculate the string form  of todaysScore and set this.score
+			 */
+			calculateTodaysScore(completedToday) {
+				//const today = new Date() 
+				//const todaysMonth = today.getMonth() + 1
+				//const todaysYear = today.getFullYear()
+				//const todaysDate = todaysYear + '-' + todaysMonth + '-' + today.getDate()
 
 				this.totalGoals = this.goals.length
-				console.log('todays total goals: ' + this.totalGoals)
-
-				this.totalGoalsCompleted = this.calculateTodaysCompletedGoals + 1
-				console.log('todays total completed goals: ' + this.totalGoalsCompleted)
+				this.totalGoalsCompleted = this.calculateTodaysCompletedGoals(completedToday)
 
 				let todaysScore = (this.totalGoalsCompleted / this.totalGoals)
-				console.log('todays score value: ' + todaysScore)
 
 				if (todaysScore == 1) {
 					this.score = 'onehundred'
@@ -162,41 +201,19 @@
 					this.score = 'zero'
 				}
 
-				console.log('todays score class: ' + this.score)
-				console.log('------------------------------------------')
+				console.log("-----------------------------------------")
+				console.log("Today's Total goals: " + this.totalGoals)
+				console.log("Today's Total completed goals: " + this.totalGoalsCompleted)
+				console.log("Today's Score value: " + todaysScore)
+				console.log("Today's Score class: " + this.score)
 			},
 
 			/**
-			 * Initializes a push/put request to the database to add/modify a day in the performance array
+			 * Initialize a push/put request to the database to add/modify a day in the performance array
 			 */
 			toggleGoalStatus(goals, id, description, completedToday) {
-				
-				/*
 
-				const today = new Date() 
-				const todaysDate = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' today.getDate()
-
-				let month = today.getMonth() + 1
-
-				for (let = i; i < month.length; i++) {
-
-					if (month[i].date == todaysDate) {
-
-						// Update todays data
-						axios.put(database + '/' + month + today.getFullYear() + '/' + this.id, { totalGoals: this.totalGoals, totalGoalsCompleted: this.totalGoalsCompleted, score: calculateTodaysCompletedGoalsValue(), id: this.id })
-						
-					} else {
-
-						// Push new day into database
-						axios.push(database + '/' + month + today.getFullYear(), { date: todaysDate, totalGoals: this.totalGoals, totalGoalsCompleted: this.totalGoalsCompleted, score: calculateTodaysCompletedGoalsValue(), id: this.id })
-							.then(() => {
-
-						})
-					}
-				}
-
-				**/
-
+				// Update goal data
 				try {
 					axios.put(database + '/goals/' + id, { description: description, completedToday: !completedToday })
 						.then(() => {
@@ -206,10 +223,49 @@
 					console.error(e)
 				} finally {
 					this.getGoals()
-					this.calculateTodaysScore()
+					this.calculateTodaysScore(completedToday)
 				}
 
-				//this.calculateTodaysScore()
+				// Update performance data
+				if (this.hasTodayBeenAddedToPerformanceLog) {
+					/* 	
+					try {
+						axios.put (
+							database + '/' + this.performance.id '/' + this.month.id + '/' this.day.id, { 
+								date: todaysDate, 
+								totalGoals: this.totalGoals, 
+								totalGoalsCompleted: this.totalGoalsCompleted, 
+								score: calculateTodaysCompletedGoalsValue(), 
+								id: this.id 
+							}
+						)
+						.then(() => {
+							this.getPerformance()
+						})
+					} catch(e) {
+						console.error(e)
+					}
+					*/
+				} else {
+					/*
+					try {
+						axios.push (
+							database + '/' + this.performance.id '/' + (todaysMonth - 1), { 
+								date: todaysDate, 
+								totalGoals: this.totalGoals, 
+								totalGoalsCompleted: this.totalGoalsCompleted, 
+								score: calculateTodaysCompletedGoalsValue(), 
+								id: this.id 
+							}
+						)
+						.then(() => {
+							this.getPerformance()
+						})
+					} catch(e) {
+						console.error(e)
+					} 
+					*/
+				}
 			},
 
 			/**
@@ -224,11 +280,12 @@
 			 * Sets isAddGoalButtonDisabled to true after text has been entered and is used to set <button> disabled initially
 			 */
 			enableSubmit() {
-				this.isAddGoalButtonDisabled = false;
+				this.isAddGoalButtonDisabled = false
+
 			},
 
 			/**
-			 * 
+			 * Toggles isAddGoalButtonPressed and isAddGoalFormVisible between true/false to display form to add a new goal to the goals array
 			 */
 			closeForm() {
 				this.isAddGoalButtonPressed = !this.isAddGoalButtonPressed
@@ -238,6 +295,11 @@
 
 		created() {
 			this.getGoals()
+			this.getPerformance()
+			console.log("-----------------------------------------")
+			console.log("INITIAL Today's Total goals: " + this.totalGoals)
+			console.log("INITIAL Today's Total completed goals: " + this.totalGoalsCompleted)
+			console.log("INITIAL Today's Score class: " + this.score)
 		},
 
 		data() {
