@@ -33,19 +33,23 @@
 
 <script>
 	export default {
+
 		name: 'AppNavigation',
+
 		methods: {
 			toggleMenu() {
 				this.isMenuButtonPressed = !this.isMenuButtonPressed
 				this.isMenuVisible = !this.isMenuVisible
 			}
 		},
+
 		data() {
 			return {
 				isMenuButtonPressed: false,
 				isMenuVisible: false
 			}
 		}
+		
 	}
 </script>
 

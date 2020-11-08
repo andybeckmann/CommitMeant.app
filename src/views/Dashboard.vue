@@ -11,7 +11,11 @@
 			</button>
 		</div>
 		<div class="user">
-			<UserHeader v-bind:score="score" />
+			<UserHeader 
+				:score="this.stats.score" 
+				:currentStreakDays="this.stats.currentStreakDays" 
+				:currentRecordDays="this.stats.currentStreakDays" 
+			/>
 			<div class="user--goals">
 				<ul>
 					<li v-for="(goal, index) in goals" :key="goal.id" :index="index" ref="goal" :class="{ 'completed' : goal.completedToday }">
@@ -45,18 +49,12 @@
 </template>
 
 <script>
-
-	// CommitMeantApp.com
-	// Version: 0.1
-	// Author: Andy Beckmann
-	// Website: ANDYBECKMANN.COM LLC
-
-	// App components
+	// App
 	import AppNavigation from '@/components/AppNavigation.vue'
 	import AppLogo from '@/components/AppLogo.vue'
 	import AppFooter from '@/components/AppFooter.vue'
 
-	// User components
+	// User
 	import UserHeader from '@/components/UserHeader.vue'
 	import UserPerformance from '@/components/UserPerformance.vue'
 
@@ -66,7 +64,7 @@
 
 	export default {
 
-		name: 'UserGoals',
+		name: 'Dashboard',
 
 		components: {
 			AppNavigation,
@@ -79,7 +77,7 @@
 		methods: {
 
 			/**
-			 * Initialize a get request to database to retreive goals array
+			 * GET goals[array] and assign to this.goals
 			 */
 			async getGoals() {
 				try {
@@ -91,7 +89,19 @@
 			},
 
 			/**
-			 * Initialize a get request to database to retreive goals array
+			 * GET stats[array] and assign to this.stats
+			 */
+			async getStats() {
+				try {
+					const res = await axios.get(database + '/stats/1')
+					this.stats = res.data
+				} catch(e) {
+					console.error(e)
+				}
+			},
+
+			/**
+			 * GET performance[array] and assign to this.performance
 			 */
 			async getPerformance() {
 				try {
@@ -103,7 +113,7 @@
 			},
 
 			/**
-			 * Initialize a post request to database to push new goal into goals array
+			 * POST new goal into goals[array]
 			 */
 			addGoal() {
 				try {
@@ -119,7 +129,7 @@
 			},
 
 			/**
-			 * Create delete request to database to delete targeted goal.id
+			 * DELETE request to database to delete targeted goal.id
 			 */
 			deleteGoal(id) {
 				try {
@@ -133,7 +143,7 @@
 			},
 
 			/**
-			 * Check to see if a record for todays performance exists
+			 * Check if a record for todays performance exists
 			 */
 			hasTodayBeenAddedToPerformanceLog(todaysYear, todaysMonth) {
 
@@ -159,12 +169,11 @@
 			},
 
 			/**
-			 * Calculate the number of currently completed goals
+			 * Calculate number of completed goals
 			 */
 			calculateTodaysCompletedGoals(completedToday) {
 
 				let todaysCompletedGoals = 1
-
 
 				for (let i=0; i < this.goals.length; i++) {
 					if (this.goals[i].completedToday == true) {
@@ -180,23 +189,25 @@
 			},
 
 			/**
-			 * Calculate the string form  of todaysScore and set this.score
+			 * Calculate string for this.score
 			 */
 			calculateTodaysScore(completedToday) {
-				//const today = new Date() 
-				//const todaysMonth = today.getMonth() + 1
-				//const todaysYear = today.getFullYear()
-				//const todaysDate = todaysYear + '-' + todaysMonth + '-' + today.getDate()
+				//const today = new Date(), 
+				//		todaysMonth = today.getMonth() + 1,
+				//		todaysYear = today.getFullYear(),
+				//		todaysDate = todaysYear + '-' + todaysMonth + '-' + today.getDate()
 
 				this.totalGoals = this.goals.length
 				this.totalGoalsCompleted = this.calculateTodaysCompletedGoals(completedToday)
 
 				let todaysScore = (this.totalGoalsCompleted / this.totalGoals)
 
-				if (todaysScore == 1) {
+				if ((this.totalGoalsCompleted / this.totalGoals) == 1) {
 					this.score = 'onehundred'
+
 				} else if (todaysScore <= 1 && todaysScore > 0) {
 					this.score = 'fifty'
+
 				} else {
 					this.score = 'zero'
 				}
@@ -206,10 +217,16 @@
 				console.log("Today's Total completed goals: " + this.totalGoalsCompleted)
 				console.log("Today's Score value: " + todaysScore)
 				console.log("Today's Score class: " + this.score)
+
+				try {
+					axios.put(database + '/stats/1', { score: this.score, currentStreakDays: this.stats.currentStreakDays, currentRecordDays: this.stats.currentRecordDays })
+				} catch(e) {
+					console.error(e)
+				}
 			},
 
 			/**
-			 * Initialize a push/put request to the database to add/modify a day in the performance array
+			 * PUSH or PUT request to the database to add or modify a day in performance [array]
 			 */
 			toggleGoalStatus(goals, id, description, completedToday) {
 
@@ -266,10 +283,13 @@
 					} 
 					*/
 				}
+
+				// Update user stats
+				this.getStats()
 			},
 
 			/**
-			 * Toggles isAddGoalButtonPressed and isAddGoalFormVisible between true/false to display form to add a new goal to the goals array
+			 * Open add goal form
 			 */
 			openForm() {
 				this.isAddGoalButtonPressed = !this.isAddGoalButtonPressed
@@ -277,29 +297,24 @@
 			},
 
 			/**
-			 * Sets isAddGoalButtonDisabled to true after text has been entered and is used to set <button> disabled initially
-			 */
-			enableSubmit() {
-				this.isAddGoalButtonDisabled = false
-
-			},
-
-			/**
-			 * Toggles isAddGoalButtonPressed and isAddGoalFormVisible between true/false to display form to add a new goal to the goals array
+			 * Close add goal form
 			 */
 			closeForm() {
 				this.isAddGoalButtonPressed = !this.isAddGoalButtonPressed
 				this.isAddGoalFormVisible = !this.isAddGoalFormVisible
+			},
+
+			/**
+			 * Enable goal submission when text is entered
+			 */
+			enableSubmit() {
+				this.isAddGoalButtonDisabled = false
 			}
 		},
 
 		created() {
+			this.getStats()
 			this.getGoals()
-			this.getPerformance()
-			console.log("-----------------------------------------")
-			console.log("INITIAL Today's Total goals: " + this.totalGoals)
-			console.log("INITIAL Today's Total completed goals: " + this.totalGoalsCompleted)
-			console.log("INITIAL Today's Score class: " + this.score)
 		},
 
 		data() {
@@ -322,7 +337,11 @@
 					score: '',
 				},
 
-				score: '',
+				stats: {
+					score: '',
+					currentStreakDays: null,
+					currentRecordDays: null
+				},
 
 				performance: [
 					{ 
@@ -469,26 +488,29 @@
 			& + label:before {
 				content: '';
 				margin-right: 10px;
-				margin-top: -2px;
+				margin-top: -3px;
 				display: inline-block;
 				vertical-align: text-top;
 				width: 26px;
 				height: 26px;
-				border: 1px solid #ccc;
+				box-shadow: 0 2px 3px rgba(0, 0, 0, 0.15);
 				background: #fff;
-				border-radius: 3px;
+				border-radius: 50%;
 			}
 
 			&:hover + label:before {
-				background: #eee;
+				background: #fff;
 			}
 
 			&:checked + label:before {
-				background: #111;
+				background: #e900ff;
+				border: 4px solid #fff;
+				width: 18px;
+				height: 18px;
 			}
 		
 			&:checked + label:after {
-				content: '\000D7';
+				content: '';
 				color: #fff;
 				position: absolute;
 				left: 8px;

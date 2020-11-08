@@ -7,12 +7,12 @@
 		<ul>
 			<li>
 				<h1>Streak</h1>
-				<span>{{ stats.currentStreakDays }}</span>
+				<span>{{ currentStreakDays }}</span>
 				<h2>Days</h2>
 			</li>
 			<li>
 				<h1>Record</h1>
-				<span>{{ stats.currentRecordDays }}</span>
+				<span>{{ currentRecordDays }}</span>
 				<h2>Days</h2>
 			</li>
 		</ul>
@@ -20,39 +20,16 @@
 </template>
 
 <script>
-	// Database
-	import axios from 'axios'
-	const database = 'http://localhost:3000'
-
 	export default {
+		
 		name: 'UserHeader',
-		props: {
-			score: String
-		},
-		methods: {
-			async getStats() {
-				try {
-					const res = await axios.get(database + '/stats/1')
-					this.stats = res.data
-				} catch(e) {
-					console.error(e)
-				}
-			},
-		},
-		data() {
-			return {
-				stats: [
-					{ 
-						currentStreakDays: "",
-						currentRecordDays: ""
-					}
 
-				]
-			}
-		},
-		created() {
-			this.getStats()
+		props: {
+			score: String,
+			currentStreakDays: Number,
+			currentRecordDays: Number
 		}
+
 	}
 </script>
 

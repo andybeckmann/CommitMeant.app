@@ -32,12 +32,19 @@
 </template>
 
 <script>
+	// Database
 	import axios from 'axios'
 	const database = 'http://localhost:3000'
 
 	export default {
+		
 		name: 'UserPerformance',
+
 		methods: {
+
+			/**
+			 * GET performance []
+			 */
 			async getPerformance() {
 				try {
 					const res = await axios.get(database + '/performance')
@@ -47,13 +54,18 @@
 				}
 			},
 
+			/**
+			 * Displays selected year
+			 */
 			selectYear(years, year) {
 				for (let i=0; i < this.performance.years.length; i++) {
 					years[i].isSelectedYear = false
 				}
 				year.isSelectedYear = true
 			}
+
 		},
+
 		data() {
 			return {
 				performance: [
@@ -82,6 +94,7 @@
 				]
 			}
 		},
+
 		created() {
 			this.getPerformance()
 		}
