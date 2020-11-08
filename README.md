@@ -20,7 +20,7 @@ A daily habit tracker, I think...
 - [ ] Ability to sign up for account
 - [ ] Ability to log in and log out of account
 
-### Setup
+## Instructions
 ```
 npm install
 ```
