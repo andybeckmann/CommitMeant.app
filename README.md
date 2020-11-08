@@ -2,7 +2,22 @@
 
 A daily habit tracker, I think...
 
-## Tasks remaining:
+## Instructions
+```
+npm install
+```
+
+### Compile for development
+```
+npm run serve
+```
+
+### Compile for production
+```
+npm run build
+```
+
+## Tasks remaining
 
 - [x] Ability to add goals to a list
 - [x] Ability to mark listed goals as complete
@@ -19,18 +34,3 @@ A daily habit tracker, I think...
 - [ ] Ability to track and display current record in days
 - [ ] Ability to sign up for account
 - [ ] Ability to log in and log out of account
-
-## Instructions
-```
-npm install
-```
-
-### Compile for development
-```
-npm run serve
-```
-
-### Compile for production
-```
-npm run build
-```
