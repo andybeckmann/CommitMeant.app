@@ -8,12 +8,12 @@
 			</button>
 			<div id="app--main-menu" class="app--main-menu" :class="{ 'show' : isMenuVisible }">
 				<ul>
-					<li>
+					<!--<li>
 						<router-link to="/login">Log in</router-link>
 					</li>
 					<li>
 						<router-link to="/signup">Sign up</router-link>
-					</li>
+					</li>-->
 					<li>
 						<router-link to="/">Dashboard</router-link>
 					</li>
@@ -49,7 +49,7 @@
 				isMenuVisible: false
 			}
 		}
-		
+
 	}
 </script>
 
