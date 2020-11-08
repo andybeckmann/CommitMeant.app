@@ -1,40 +1,33 @@
 {
+  "settings": {
+    "disableFlashingGoals": false,
+    "userAvatar": "picture.jpg",
+    "userEmail": "email@domain.com",
+    "userPassword": "••••••••••"
+  },
   "stats": [
     {
-      "currentStreakDays": 3,
-      "currentRecordDays": 10,
+      "score": "zero",
+      "currentStreakDays": null,
+      "currentRecordDays": null,
       "id": 1
     }
   ],
   "goals": [
     {
-      "description": "Add flavors (themes)",
-      "completedToday": true,
+      "description": "Exercise for 30 minutes",
+      "completedToday": false,
       "id": 1
     },
     {
-      "description": "Add drag ability to reorder goals",
-      "completedToday": true,
+      "description": "Meditate for 15 minutes",
+      "completedToday": false,
       "id": 2
-    },
-    {
-      "description": "Add ability to toggle goal flashing",
-      "completedToday": true,
-      "id": 3
-    },
-    {
-      "description": "Fix missing navigation overlay",
-      "completedToday": true,
-      "id": 4
-    },
-    {
-      "description": "Prevent layering of menus",
-      "completedToday": true,
-      "id": 5
     }
   ],
   "performance": [
     {
+      "id": 1,
       "year": 2018,
       "isSelectedYear": false,
       "months": [
@@ -2705,6 +2698,7 @@
       ]
     },
     {
+      "id": 2,
       "year": 2019,
       "isSelectedYear": false,
       "months": [
@@ -5375,6 +5369,7 @@
       ]
     },
     {
+      "id": 3,
       "year": 2020,
       "isSelectedYear": true,
       "months": [
@@ -7315,14 +7310,14 @@
               "date": "2020-09-23",
               "totalGoals": "0",
               "totalGoalsCompleted": "0",
-              "score": "zero",
+              "score": "onehundred",
               "id": 23
             },
             {
               "date": "2020-09-24",
               "totalGoals": "0",
               "totalGoalsCompleted": "0",
-              "score": "zero",
+              "score": "onehundred",
               "id": 24
             },
             {
@@ -7336,7 +7331,7 @@
               "date": "2020-09-26",
               "totalGoals": "0",
               "totalGoalsCompleted": "0",
-              "score": "zero",
+              "score": "onehundred",
               "id": 26
             },
             {
@@ -7357,7 +7352,7 @@
               "date": "2020-09-29",
               "totalGoals": "0",
               "totalGoalsCompleted": "0",
-              "score": "zero",
+              "score": "onehundred",
               "id": 29
             },
             {
@@ -7397,7 +7392,7 @@
               "date": "2020-10-03",
               "totalGoals": "0",
               "totalGoalsCompleted": "0",
-              "score": "zero",
+              "score": "onehundred",
               "id": 3
             },
             {
@@ -7411,14 +7406,14 @@
               "date": "2020-10-05",
               "totalGoals": "0",
               "totalGoalsCompleted": "0",
-              "score": "zero",
+              "score": "onehundred",
               "id": 5
             },
             {
               "date": "2020-10-06",
               "totalGoals": "0",
               "totalGoalsCompleted": "0",
-              "score": "zero",
+              "score": "onehundred",
               "id": 6
             },
             {
@@ -7460,7 +7455,7 @@
               "date": "2020-10-12",
               "totalGoals": "0",
               "totalGoalsCompleted": "0",
-              "score": "zero",
+              "score": "onehundred",
               "id": 12
             },
             {
@@ -7481,7 +7476,7 @@
               "date": "2020-10-15",
               "totalGoals": "0",
               "totalGoalsCompleted": "0",
-              "score": "zero",
+              "score": "onehundred",
               "id": 15
             },
             {
@@ -7516,14 +7511,14 @@
               "date": "2020-10-20",
               "totalGoals": "0",
               "totalGoalsCompleted": "0",
-              "score": "zero",
+              "score": "onehundred",
               "id": 20
             },
             {
               "date": "2020-10-21",
               "totalGoals": "0",
               "totalGoalsCompleted": "0",
-              "score": "zero",
+              "score": "onehundred",
               "id": 21
             },
             {
@@ -7558,14 +7553,14 @@
               "date": "2020-10-26",
               "totalGoals": "0",
               "totalGoalsCompleted": "0",
-              "score": "zero",
+              "score": "onehundred",
               "id": 26
             },
             {
               "date": "2020-10-27",
               "totalGoals": "0",
               "totalGoalsCompleted": "0",
-              "score": "zero",
+              "score": "onehundred",
               "id": 27
             },
             {
@@ -7593,7 +7588,7 @@
               "date": "2020-10-31",
               "totalGoals": "0",
               "totalGoalsCompleted": "0",
-              "score": "zero",
+              "score": "onehundred",
               "id": 31
             }
           ]
