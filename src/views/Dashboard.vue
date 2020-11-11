@@ -14,15 +14,23 @@
 			<UserHeader 
 				:score="this.stats.score" 
 				:currentStreakDays="this.stats.currentStreakDays" 
-				:currentRecordDays="this.stats.currentStreakDays" 
+				:currentRecordDays="this.stats.currentRecordDays" 
 			/>
 			<div class="user--goals">
 				<ul>
-					<li v-for="(goal, index) in goals" :key="goal.id" :index="index" ref="goal" :class="{ 'completed' : goal.completedToday }">
+					<li v-for="(goal, index) in goals" :key="index" :index="index" ref="goal" :class="{ 'completed' : this.goal.completedToday }">
 						<div class="user--goals-item">
-							<button @click="toggleGoalStatus(goals, goal.id, goal.description, goal.completedToday)" :class="{ 'completed' : goal.completedToday }"></button>
+							<button 
+								@click="toggleGoalStatus(goals, goal.id, goal.description, goal.completedToday)" 
+								:data-key="goal" 
+								:class="{ 'completed' : goal.completedToday }
+							"></button>
 							{{goal.description}}
-							<button @click="deleteGoal(goal.id)" :data-key="goal" class="delete"></button>
+							<button 
+								@click="deleteGoal(goal.id)" 
+								:data-key="goal" 
+								class="delete"
+							></button> 
 						</div>
 					</li>
 				</ul>
@@ -49,16 +57,12 @@
 </template>
 
 <script>
-	// App
 	import AppNavigation from '@/components/AppNavigation.vue'
 	import AppLogo from '@/components/AppLogo.vue'
 	import AppFooter from '@/components/AppFooter.vue'
-
-	// User
 	import UserHeader from '@/components/UserHeader.vue'
 	import UserPerformance from '@/components/UserPerformance.vue'
 
-	// Database
 	import axios from 'axios'
 	const database = 'http://localhost:3000'
 
@@ -143,32 +147,6 @@
 			},
 
 			/**
-			 * Check if a record for todays performance exists
-			 */
-			hasTodayBeenAddedToPerformanceLog(todaysYear, todaysMonth) {
-
-				let hasTodayBeenAdded = false
-
-				for (let year in this.performance) {
-					if (year.year == todaysYear) {
-						for (let month in year) {
-							if(month.month == todaysMonth) {
-								for (let days in month) {
-									for (let day in days) {
-										if (day.date == "2020-10-05") {
-											hasTodayBeenAdded = true
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-
-				return hasTodayBeenAdded
-			},
-
-			/**
 			 * Calculate number of completed goals
 			 */
 			calculateTodaysCompletedGoals(completedToday) {
@@ -192,11 +170,6 @@
 			 * Calculate string for this.score
 			 */
 			calculateTodaysScore(completedToday) {
-				//const today = new Date(), 
-				//		todaysMonth = today.getMonth() + 1,
-				//		todaysYear = today.getFullYear(),
-				//		todaysDate = todaysYear + '-' + todaysMonth + '-' + today.getDate()
-
 				this.totalGoals = this.goals.length
 				this.totalGoalsCompleted = this.calculateTodaysCompletedGoals(completedToday)
 
@@ -217,7 +190,13 @@
 				console.log("Today's Total completed goals: " + this.totalGoalsCompleted)
 				console.log("Today's Score value: " + todaysScore)
 				console.log("Today's Score class: " + this.score)
+				console.log("-----------------------------------------")
+			},
 
+			/**
+			 * PUT request to the database to update stats [array]
+			 */
+			updateStats() {
 				try {
 					axios.put(database + '/stats/1', { score: this.score, currentStreakDays: this.stats.currentStreakDays, currentRecordDays: this.stats.currentRecordDays })
 				} catch(e) {
@@ -230,68 +209,100 @@
 			 */
 			toggleGoalStatus(goals, id, description, completedToday) {
 
-				// Update goal data
+				/**
+				 * The magic
+				 */
+
+				// Variables for the magic
+				const 	today = new Date(),
+						todaysMonth = today.getMonth() + 1,
+						todaysYear = today.getFullYear(),
+						todaysDay = today.getDate()
+
 				try {
+					// PUT request to the database to update target goal.completedToday value
 					axios.put(database + '/goals/' + id, { description: description, completedToday: !completedToday })
 						.then(() => {
+							// Refresh goals
 							this.getGoals()
 						})
+
 				} catch(e) {
 					console.error(e)
+
 				} finally {
-					this.getGoals()
+					// Calculate todays score
 					this.calculateTodaysScore(completedToday)
+
+					// Update stats [array]
+					this.updateStats()
+
+					// Get updated stats [array]
+					this.getStats()
 				}
 
-				// Update performance data
-				if (this.hasTodayBeenAddedToPerformanceLog) {
-					/* 	
-					try {
-						axios.put (
-							database + '/' + this.performance.id '/' + this.month.id + '/' this.day.id, { 
-								date: todaysDate, 
-								totalGoals: this.totalGoals, 
-								totalGoalsCompleted: this.totalGoalsCompleted, 
-								score: calculateTodaysCompletedGoalsValue(), 
-								id: this.id 
+				for (let year in this.performance) {
+					if (this.performance[year]["year"] == todaysYear) {
+
+						for (let month in this.performance[year]["months"]) {
+							if(this.performance[year]["months"][month]["id"] == todaysMonth) {
+
+								for (let day in this.performance[year]["months"][month]["days"]) {
+									let dateString = todaysYear + '-' + todaysMonth + '-' + todaysDay
+
+									if (this.performance[year]["months"][month]["days"][day]["date"] === dateString) {
+										/*try {
+											// PUT request to the database to update target performance[year]["months"][month]["days"][day]["score"]
+											let currentDayTarget = 
+												'/performance/' + this.performance[year]["id"] + 
+												'/months/' + this.performance[year]["id"][months]["id"] + 
+												'/days/' + this.performance[year]["months"][month]["days"][day]["id"]
+
+											console.log('Todays score in the db should be: ' + this.score)
+
+											axios.put(database + currentTarget, { 
+												"score"					: score,
+												"totalGoals"			: this.totalGoals,
+												"totalCompletedGoals"	: this.totalCompletedGoals,
+												"id"					: id
+											})
+
+											console.log('Todays score in the db is now: ' + this.performance[year]["months"][month]["days"][day]["score"])
+
+										} catch(e) {
+											console.error(e)
+
+										}*/
+			
+									} else {
+										// push new day into performance[year][month]["days"] [array]
+									}
+
+								}
+
+							} else {
+
+								// push new month in performance[year]["months"] [array]
+								// push new day into performance[year][month]["days"] [array]
+
 							}
-						)
-						.then(() => {
-							this.getPerformance()
-						})
-					} catch(e) {
-						console.error(e)
+						}
+
+					} else {
+
+						// push new year in performance [array]
+						// push new month in performance[year]["months"] [array]
+						// push new day into performance[year][month]["days"] [array]
+
 					}
-					*/
-				} else {
-					/*
-					try {
-						axios.push (
-							database + '/' + this.performance.id '/' + (todaysMonth - 1), { 
-								date: todaysDate, 
-								totalGoals: this.totalGoals, 
-								totalGoalsCompleted: this.totalGoalsCompleted, 
-								score: calculateTodaysCompletedGoalsValue(), 
-								id: this.id 
-							}
-						)
-						.then(() => {
-							this.getPerformance()
-						})
-					} catch(e) {
-						console.error(e)
-					} 
-					*/
 				}
-
-				// Update user stats
-				this.getStats()
 			},
 
 			/**
 			 * Open add goal form
 			 */
 			openForm() {
+
 				this.isAddGoalButtonPressed = !this.isAddGoalButtonPressed
 				this.isAddGoalFormVisible = !this.isAddGoalFormVisible
 			},
@@ -300,6 +311,7 @@
 			 * Close add goal form
 			 */
 			closeForm() {
+
 				this.isAddGoalButtonPressed = !this.isAddGoalButtonPressed
 				this.isAddGoalFormVisible = !this.isAddGoalFormVisible
 			},
@@ -308,6 +320,7 @@
 			 * Enable goal submission when text is entered
 			 */
 			enableSubmit() {
+
 				this.isAddGoalButtonDisabled = false
 			}
 		},
@@ -315,6 +328,7 @@
 		created() {
 			this.getStats()
 			this.getGoals()
+			this.getPerformance()
 		},
 
 		data() {
@@ -329,6 +343,7 @@
 				label: 'Add Goal',
 				description: '',
 				goal: {
+					completedToday: false,
 					description: '',
 					id: null
 				},

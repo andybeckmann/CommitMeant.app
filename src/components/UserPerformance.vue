@@ -122,6 +122,7 @@
 			padding-left: 10px;
 			justify-content: right;
 			flex-flow: row-reverse nowrap;
+			align-content: flex-start;
 
 			li {
 				margin-right: 15px;
@@ -188,7 +189,7 @@
 				height: 182px;
 				list-style: none;
 				display: flex;
-				flex-flow: wrap;
+				flex-flow: column wrap;
 
 				li {
 					width: 25px;

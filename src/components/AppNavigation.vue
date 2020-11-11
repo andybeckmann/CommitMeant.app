@@ -37,10 +37,12 @@
 		name: 'AppNavigation',
 
 		methods: {
+
 			toggleMenu() {
 				this.isMenuButtonPressed = !this.isMenuButtonPressed
 				this.isMenuVisible = !this.isMenuVisible
 			}
+			
 		},
 
 		data() {
