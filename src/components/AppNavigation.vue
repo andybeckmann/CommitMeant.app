@@ -73,7 +73,7 @@
 			height: 5px;
 			width: 25px;
 			background: #fff;
-			margin-bottom: 3px;
+			margin-bottom: 4px;
 			border-radius: 10px;
 
 			&.app--main-menu-toggle-top {

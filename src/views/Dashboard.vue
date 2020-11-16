@@ -21,13 +21,13 @@
 					<li v-for="(goal, index) in goals" :key="index" :index="index" ref="goal" :class="{ 'completed' : this.goal.completedToday }">
 						<div class="user--goals-item">
 							<button 
-								@click="toggleGoalStatus(goals, goal.id, goal.description, goal.completedToday)" 
+								@click="toggleGoalStatus(goals, index, goal.description, goal.completedToday)" 
 								:data-key="goal" 
 								:class="{ 'completed' : goal.completedToday }
 							"></button>
 							{{goal.description}}
 							<button 
-								@click="deleteGoal(goal.id)" 
+								@click="deleteGoal(index)" 
 								:data-key="goal" 
 								class="delete"
 							></button> 
@@ -37,11 +37,11 @@
 			</div>
 			<div class="user--add-goal-form" :class="{ 'show' : isAddGoalFormVisible }">
 				<div class="user--add-goal-form-fields">
-					<label>{{ label }}</label>
+					<label>{{ addGoalLabel }}</label>
 					<input
 						autofocus
 						placeholder="Set a goal, see it through..."
-						v-model="description"
+						v-model="goal.description"
 						v-on:keyup="enableSubmit"
 						@keyup.enter="addGoal"
 					>
@@ -57,14 +57,18 @@
 </template>
 
 <script>
+	// App
 	import AppNavigation from '@/components/AppNavigation.vue'
 	import AppLogo from '@/components/AppLogo.vue'
 	import AppFooter from '@/components/AppFooter.vue'
+
+	// User
 	import UserHeader from '@/components/UserHeader.vue'
 	import UserPerformance from '@/components/UserPerformance.vue'
 
+	// Databse
 	import axios from 'axios'
-	const database = 'http://localhost:3000'
+	const database = 'https://commitmeant-f2536.firebaseio.com'
 
 	export default {
 
@@ -81,24 +85,24 @@
 		methods: {
 
 			/**
-			 * GET goals[array] and assign to this.goals
+			 * GET stats[array] and assign to this.stats
 			 */
-			async getGoals() {
+			async getStats() {
 				try {
-					const res = await axios.get(database + '/goals')
-					this.goals = res.data
+					const res = await axios.get(database + '/stats/0.json')
+					this.stats = res.data
 				} catch(e) {
 					console.error(e)
 				}
 			},
 
 			/**
-			 * GET stats[array] and assign to this.stats
+			 * GET goals[array] and assign to this.goals
 			 */
-			async getStats() {
+			async getGoals() {
 				try {
-					const res = await axios.get(database + '/stats/1')
-					this.stats = res.data
+					const res = await axios.get(database + '/goals.json')
+					this.goals = res.data
 				} catch(e) {
 					console.error(e)
 				}
@@ -109,7 +113,7 @@
 			 */
 			async getPerformance() {
 				try {
-					const res = await axios.get(database + '/performance')
+					const res = await axios.get(database + '/performance.json')
 					this.performance = res.data
 				} catch(e) {
 					console.error(e)
@@ -119,14 +123,14 @@
 			/**
 			 * POST new goal into goals[array]
 			 */
-			addGoal() {
+			async addGoal() {
 				try {
-					const res = axios.post(database + '/goals', { description: this.description, completedToday: false })
+					const res = await axios.post(database + '/goals.json', { description: this.goal.description, completedToday: false, id: this.goal.id })
 					this.goals = [this.goals, res.data]
 				} catch(e) {
 					console.error(e)
 				} finally {
-					this.description = ''
+					this.goal.description = ''
 					this.getGoals()
 					this.closeForm()
 				}
@@ -135,85 +139,21 @@
 			/**
 			 * DELETE request to database to delete targeted goal.id
 			 */
-			deleteGoal(id) {
+			async deleteGoal(id) {
 				try {
-					axios.delete(database + '/goals/' + id)
-						.then(() => {
-							this.getGoals()
-						})
+					await axios.delete(database + '/goals/' + id + '.json')
+					
 				} catch(e) {
 					console.error(e)
 				}
+				this.getGoals()
 			},
 
 			/**
-			 * Calculate number of completed goals
+			 * Master Function -> PUSH or PUT request to the database to add or modify a day in performance [array]
 			 */
-			calculateTodaysCompletedGoals(completedToday) {
+			async toggleGoalStatus(goals, index, description, completedToday) {
 
-				let todaysCompletedGoals = 1
-
-				for (let i=0; i < this.goals.length; i++) {
-					if (this.goals[i].completedToday == true) {
-						todaysCompletedGoals += 1
-					}
-				}
-
-				if (completedToday) {
-					todaysCompletedGoals -= 2
-				}
-
-				return todaysCompletedGoals
-			},
-
-			/**
-			 * Calculate string for this.score
-			 */
-			calculateTodaysScore(completedToday) {
-				this.totalGoals = this.goals.length
-				this.totalGoalsCompleted = this.calculateTodaysCompletedGoals(completedToday)
-
-				let todaysScore = (this.totalGoalsCompleted / this.totalGoals)
-
-				if ((this.totalGoalsCompleted / this.totalGoals) == 1) {
-					this.score = 'onehundred'
-
-				} else if (todaysScore <= 1 && todaysScore > 0) {
-					this.score = 'fifty'
-
-				} else {
-					this.score = 'zero'
-				}
-
-				console.log("-----------------------------------------")
-				console.log("Today's Total goals: " + this.totalGoals)
-				console.log("Today's Total completed goals: " + this.totalGoalsCompleted)
-				console.log("Today's Score value: " + todaysScore)
-				console.log("Today's Score class: " + this.score)
-				console.log("-----------------------------------------")
-			},
-
-			/**
-			 * PUT request to the database to update stats [array]
-			 */
-			updateStats() {
-				try {
-					axios.put(database + '/stats/1', { score: this.score, currentStreakDays: this.stats.currentStreakDays, currentRecordDays: this.stats.currentRecordDays })
-				} catch(e) {
-					console.error(e)
-				}
-			},
-
-			/**
-			 * PUSH or PUT request to the database to add or modify a day in performance [array]
-			 */
-			toggleGoalStatus(goals, id, description, completedToday) {
-
-				/**
-				 * The magic
-				 */
-
-				// Variables for the magic
 				const 	today = new Date(),
 						todaysMonth = today.getMonth() + 1,
 						todaysYear = today.getFullYear(),
@@ -221,23 +161,22 @@
 
 				try {
 					// PUT request to the database to update target goal.completedToday value
-					axios.put(database + '/goals/' + id, { description: description, completedToday: !completedToday })
-						.then(() => {
-							// Refresh goals
-							this.getGoals()
-						})
+					await axios.put(database + '/goals/' + index + '.json', { description: description, completedToday: !completedToday })
 
 				} catch(e) {
 					console.error(e)
 
 				} finally {
-					// Calculate todays score
-					this.calculateTodaysScore(completedToday)
+					// GET updated goals [array]
+					this.getGoals()
 
-					// Update stats [array]
+					// Calculate todays score
+					this.calculateTodaysScore(goals, completedToday)
+
+					// PUT stats [array]
 					this.updateStats()
 
-					// Get updated stats [array]
+					// GET updated stats [array]
 					this.getStats()
 				}
 
@@ -275,26 +214,102 @@
 										}*/
 			
 									} else {
-										// push new day into performance[year][month]["days"] [array]
+										// 1 push new day into performance[year][month]["days"] [array]
 									}
 
 								}
 
 							} else {
 
-								// push new month in performance[year]["months"] [array]
-								// push new day into performance[year][month]["days"] [array]
+								// 1 push new month in performance[year]["months"] [array]
+								// 2 push new day into performance[year][month]["days"] [array]
 
 							}
 						}
 
 					} else {
 
-						// push new year in performance [array]
-						// push new month in performance[year]["months"] [array]
-						// push new day into performance[year][month]["days"] [array]
+						// 1 push new year in performance [array]
+						// 2 push new month in performance[year]["months"] [array]
+						// 3 push new day into performance[year][month]["days"] [array]
 
 					}
+				}
+			},
+
+			/**
+			 * Calculate number of completed goals
+			 */
+			calculateTodaysCompletedGoals(goals, completedToday) {
+
+				let todaysCompletedGoals = 1
+
+				for (let i in goals) {
+					if (goals[i].completedToday == true) {
+						todaysCompletedGoals += 1
+					}
+				}
+
+				if (completedToday) {
+					todaysCompletedGoals -= 2
+				}
+
+				return todaysCompletedGoals
+			},
+
+			/**
+			 * Calculate number of total goals
+			 */
+			calculateTotalGoals(goals) {
+				let goalCount = []
+
+				for (let i in goals) {
+					goalCount.push(i)
+				}
+
+				return goalCount.length
+			},
+
+			/**
+			 * Calculate string for this.score
+			 */
+			calculateTodaysScore(goals, completedToday) {
+
+				this.totalGoals = this.calculateTotalGoals(goals)
+				this.totalGoalsCompleted = this.calculateTodaysCompletedGoals(goals, completedToday)
+
+				let todaysScore = (this.totalGoalsCompleted / this.totalGoals)
+
+				if ((this.totalGoalsCompleted / this.totalGoals) == 1) {
+					this.score = 'onehundred'
+
+				} else if (todaysScore <= 1 && todaysScore > 0) {
+					this.score = 'fifty'
+
+				} else {
+					this.score = 'zero'
+				}
+
+				// Console debugging:
+				/* 
+				console.log("---------------------------------------")
+				console.log("Today's totalGoals: " + this.totalGoals)
+				console.log("Today's totalGoalsCompleted: " + this.totalGoalsCompleted)
+				console.log("Today's score value: " + todaysScore)
+				console.log("Today's score: " + this.score)
+				*/
+				
+			},
+
+			/**
+			 * PUT request to the database to update stats [array]
+			 */
+			async updateStats() {
+				try {
+					const res = await axios.put(database + '/stats/0.json', { score: this.score, currentStreakDays: this.stats.currentStreakDays, currentRecordDays: this.stats.currentRecordDays, id: 1 })
+					this.stats = res.data
+				} catch(e) {
+					console.error(e)
 				}
 			},
 
@@ -333,31 +348,36 @@
 
 		data() {
 			return {
-				goals: [],
 
+				// UI variables
 				isAddGoalFormVisible: false,
 				isAddGoalFormFilled: false,
 				isAddGoalButtonDisabled: true,
 				isAddGoalButtonPressed: false,
 
-				label: 'Add Goal',
-				description: '',
-				goal: {
-					completedToday: false,
-					description: '',
-					id: null
-				},
-
-				day: {
-					score: '',
-				},
-
+				/**
+				 * Initial stats [array] data
+				 */
 				stats: {
 					score: '',
 					currentStreakDays: null,
 					currentRecordDays: null
 				},
 
+				/**
+				 * Initial goals [array] data
+				 */
+				goals: [],
+				addGoalLabel: 'Add Goal',
+				goal: {
+					completedToday: false,
+					description: '',
+					id: null
+				},
+
+				/**
+				 * Initial performance [array] data
+				 */
 				performance: [
 					{ 
 						year: '',
@@ -534,6 +554,27 @@
 				font-weight: bold;
 			}
 		}
+
+		button.submit, button.update {
+			font-size: 18px;
+			font-weight: bold;
+			text-transform: uppercase;
+			text-align: center;
+			color: #fff;
+			width: 100%;
+			margin: 15px 0;
+			padding: 24px;
+			background-color: #e900ff;
+			border: none;
+			border-radius: 15px;
+			cursor: pointer;
+
+			&:focus {
+				outline: none;
+				border: 4px solid #9703fa;
+				padding: 20px;
+			}
+		}
 	}
 
 	.user--goals{
@@ -646,7 +687,7 @@
 					height: 24px;
 					background: 0 0;
 					border: 3px solid #fff;
-					border-radius: 25px;
+					border-radius: 50%;
 					display: inline-block;
 					content: "";
 					margin-bottom: -5px;
@@ -670,7 +711,7 @@
 							width: 25px;
 							height: 25px;
 							background: #fff;
-							border-radius: 25px;
+							border-radius: 50%;
 							display: inline-block;
 							border: 3px solid #fff;
 							content: "";

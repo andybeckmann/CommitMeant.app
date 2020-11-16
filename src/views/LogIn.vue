@@ -12,6 +12,7 @@
 			<input type="text" placeholder="contact@andybeckmann.com">
 			<label>Password</label>
 			<input type="password" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;">
+			<button class="submit">Submit</button>
 		</div>
 		<AppFooter />
 	</div>

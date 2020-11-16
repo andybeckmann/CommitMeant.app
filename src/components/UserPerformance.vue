@@ -8,9 +8,9 @@
 			</ul>
 		</div>
 		<ul class="user--performance-years">
-			<li class="user--performance-year" v-for="(year, index) in performance.years" :key="year.year" :index="index" :class="{ 'show' : year.isSelectedYear }">
+			<li class="user--performance-year" v-for="(year, index) in performance" :key="year.year" :index="index" :class="{ 'show' : year.isSelectedYear }">
 				<ul :id="year.year">
-					<li v-for="month in year.months.slice().reverse()" :key="month.name">
+					<li v-for="(month, index) in year.months"  :key="month.name" :index="index">
 						<h1>{{ month.name }}</h1>
 						<div class="user--performance-data">
 							<ul class="user--performance-data-month">
@@ -24,7 +24,7 @@
 	</div>
 	<div class="user--view-history">
 		<ul>
-			<li class="user--performance-year" v-for="(year, index) in performance.years" :key="year.year" :index="index">
+			<li class="user--performance-year" v-for="(year, index) in performance" :key="year.year" :index="index">
 				<a href="#" :class="[{ 'active ' : year.isSelectedYear }, 'user--view-history-year']" :data-key="year" @click="selectYear(performance.years, year)">{{ year.year }}</a>
 			</li>
 		</ul>
@@ -34,7 +34,7 @@
 <script>
 	// Database
 	import axios from 'axios'
-	const database = 'http://localhost:3000'
+	const database = 'https://commitmeant-f2536.firebaseio.com'
 
 	export default {
 		
@@ -47,8 +47,8 @@
 			 */
 			async getPerformance() {
 				try {
-					const res = await axios.get(database + '/performance')
-					this.performance.years = res.data
+					const res = await axios.get(database + '/performance.json')
+					this.performance = res.data
 				} catch(e) {
 					console.error(e)
 				}
@@ -58,7 +58,7 @@
 			 * Displays selected year
 			 */
 			selectYear(years, year) {
-				for (let i=0; i < this.performance.years.length; i++) {
+				for (let i=0; i < this.performance.length; i++) {
 					years[i].isSelectedYear = false
 				}
 				year.isSelectedYear = true
@@ -70,26 +70,20 @@
 			return {
 				performance: [
 					{ 
-						"years": [
-							{
-								"year": "",
-								"isSelectedYear": false,
-								"months": [
+						year: '',
+						months: [
+							{ 
+								name: '',
+								days: [
 									{
-										"name": "",
-										"days": [
-											{
-												"date": "",
-												"totalGoals": "",
-												"totalGoalsCompleted": "",
-												"score": "",
-												"id": null
-											}
-										]
+										date: '',
+										totalGoals: 0,
+										totalGoalsCompleted: 0,
+										score: 0,
 									}
 								]
 							}
-						] 
+						]
 					}
 				]
 			}
@@ -196,7 +190,7 @@
 					height: 25px;
 					background: #fff;
 					border: 4px dashed #cccccc;
-					border-radius: 25px;
+					border-radius: 50%;
 					margin-right: 1px;
 					margin-bottom: 1px;
 

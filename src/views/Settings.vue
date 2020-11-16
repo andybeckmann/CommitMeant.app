@@ -8,10 +8,6 @@
 			</button>
 		</div>
 		<div class="user--settings">
-			<div class="user--settings-setting user--settings-setting-disable-flashing-goals">
-				<input type="checkbox" role="checkbox" name="checkbox-option-one" id="checkbox-option-one" checked="" aria-checked="true">
-				<label for="checkbox-option-one">Disable flashing goals</label>
-			</div>
 			<div class="user--settings-setting">
 				<label>Avatar</label>
 				<input type="text" placeholder="picture.jpg">
@@ -24,6 +20,15 @@
 				<label>Password</label>
 				<input type="password" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;">
 			</div>
+			<div class="user--settings-setting">
+				<label>Confirm password</label>
+				<input type="password" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;">
+			</div>
+			<div class="user--settings-setting user--settings-setting-disable-flashing-goals">
+				<input type="checkbox" role="checkbox" name="checkbox-option-one" id="checkbox-option-one" checked="" aria-checked="true">
+				<label for="checkbox-option-one">Disable flashing goals</label>
+			</div>
+			<button class="update">Update</button>
 		</div>
 		<AppFooter />
 	</div>
@@ -46,6 +51,7 @@
 
 <style scoped lang="scss">
 	.user--settings-setting-disable-flashing-goals {
+		padding: 35px 0;
 		text-align: center;
 	}
 </style>
