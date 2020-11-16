@@ -58,7 +58,7 @@
 			right: -17px;
 			background: #fff;
 			border: 4px dashed #cccccc;
-			border-radius: 25px;
+			border-radius: 50%;
 			margin-right: 1px;
 			margin-bottom: 1px;
 
