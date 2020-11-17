@@ -26,9 +26,9 @@ npm run build
 - [x] Ability to toggle between previous years of performance
 - [x] Ability to calculate a score using the ratio of completed goals to total goals
 - [x] Ability to display the color representing todays score next to avatar
+- [x] Ability to submit data daily to track performance
 
 - [ ] Ability to drag to reorder goals
-- [ ] Ability to submit data daily to track performance
 - [ ] Ability to toggle the default flashing style of goals in settings
 - [ ] Ability to track and display current streak in days
 - [ ] Ability to track and display current record in days
