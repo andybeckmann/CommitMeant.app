@@ -8,13 +8,15 @@
 			</button>
 		</div>
 		<div class="user--settings">
-			<div class="user--settings-setting">
+			<div class="user--settings-setting user--settings-avatar">
 				<label>Avatar</label>
-				<input type="text" placeholder="picture.jpg">
+				<ul>
+					<li v-for="(avatar, index) in this.avatarEmojis" :key="index" :index="index" @click="selectAvatar(index)" :class="{ 'active' : avatar.selected }">{{ avatar.char }}</li>
+				</ul>
 			</div>
 			<div class="user--settings-setting">
-				<label>Email</label>
-				<input type="text" placeholder="contact@andybeckmann.com">
+				<label>Username</label>
+				<input type="text" placeholder="andybeckmann">
 			</div>
 			<div class="user--settings-setting">
 				<label>Password</label>
@@ -41,10 +43,81 @@
 
 	export default {
 		name: 'Settings',
+
 		components: {
 			AppNavigation, 
 			AppLogo,
 			AppFooter
+		},
+
+		methods: {
+			selectAvatar(index) {
+
+				for (let i in this.avatarEmojis) {
+					if (this.avatarEmojis[i].selected == true) {
+						this.avatarEmojis[i].selected = false
+					}
+				}
+
+				this.avatarEmojis[index].selected = true
+			}
+		},
+
+		data() {
+			return {
+				avatarEmojis: [
+					{ 
+						id: 1,
+						char: '🙂',
+						selected: true
+					},
+					{ 
+						id: 2,
+						char: '😎' ,
+						selected: false
+					},
+					{ 	
+						id: 3,
+						char: '😈' ,
+						selected: false
+					},
+					{ 	
+						id: 4,
+						char: '👽',
+						selected: false 
+					},
+					{ 	
+						id: 5,
+						char: '🤖',
+						selected: false 
+					},
+					{ 	
+						id: 6,
+						char: '🦄',
+						selected: false 
+					},
+					{ 	
+						id: 7,
+						char: '🐶',
+						selected: false 
+					},
+					{ 	
+						id: 8,
+						char: '🐷',
+						selected: false 
+					},
+					{ 	
+						id: 9,
+						char: '🦁',
+						selected: false 
+					},
+					{ 	
+						id: 10,
+						char: '🐯',
+						selected: false 
+					}
+				]
+			}
 		}
 	}
 </script>
@@ -53,5 +126,27 @@
 	.user--settings-setting-disable-flashing-goals {
 		padding: 35px 0;
 		text-align: center;
+	}
+
+	.user--settings-avatar {
+		ul {
+			margin: 15px 0;
+			padding: 0;
+			list-style-type: none;
+			display: flex;
+			overflow-x: scroll;
+
+			li {
+				font-size: 75px;
+				line-height: 80px;
+				margin-right: 15px;
+				border: 5px solid transparent;
+
+				&.active {
+					border: 5px dashed #e900ff;
+					border-radius: 15px;
+				}
+			}
+		}
 	}
 </style>

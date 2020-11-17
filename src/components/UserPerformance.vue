@@ -8,13 +8,13 @@
 			</ul>
 		</div>
 		<ul class="user--performance-years">
-			<li class="user--performance-year" v-for="(year, index) in performance" :key="year.year" :index="index" :class="{ 'show' : year.isSelectedYear }">
+			<li class="user--performance-year" v-for="(year, index) in performance" :key="index" :index="index" :class="{ 'show' : year.isSelectedYear }">
 				<ul :id="year.year">
-					<li v-for="(month, index) in year.months"  :key="month.name" :index="index">
+					<li v-for="(month, index) in year.months" :key="month.name" :index="index">
 						<h1>{{ month.name }}</h1>
 						<div class="user--performance-data">
 							<ul class="user--performance-data-month">
-								<li v-for="day in month.days" :key="day.id" :class="day.score"></li>
+								<li v-for="(day, index) in month.days" :key="day.date" :index="index" :class="day.score"></li>
 							</ul>
 						</div>
 					</li>
@@ -25,34 +25,22 @@
 	<div class="user--view-history">
 		<ul>
 			<li class="user--performance-year" v-for="(year, index) in performance" :key="year.year" :index="index">
-				<a href="#" :class="[{ 'active ' : year.isSelectedYear }, 'user--view-history-year']" :data-key="year" @click="selectYear(performance.years, year)">{{ year.year }}</a>
+				<a href="#" :class="[{ 'active ' : year.isSelectedYear }, 'user--view-history-year']" :data-key="year" @click="selectYear(this.performance.years, year)">{{ year.year }}</a>
 			</li>
 		</ul>
 	</div>
 </template>
 
 <script>
-	// Database
-	import axios from 'axios'
-	const database = 'https://commitmeant-f2536.firebaseio.com'
-
 	export default {
 		
 		name: 'UserPerformance',
 
-		methods: {
+		props: {
+			performance: Array
+		},
 
-			/**
-			 * GET performance []
-			 */
-			async getPerformance() {
-				try {
-					const res = await axios.get(database + '/performance.json')
-					this.performance = res.data
-				} catch(e) {
-					console.error(e)
-				}
-			},
+		methods: {
 
 			/**
 			 * Displays selected year
@@ -64,33 +52,6 @@
 				year.isSelectedYear = true
 			}
 
-		},
-
-		data() {
-			return {
-				performance: [
-					{ 
-						year: '',
-						months: [
-							{ 
-								name: '',
-								days: [
-									{
-										date: '',
-										totalGoals: 0,
-										totalGoalsCompleted: 0,
-										score: 0,
-									}
-								]
-							}
-						]
-					}
-				]
-			}
-		},
-
-		created() {
-			this.getPerformance()
 		}
 	}
 </script>

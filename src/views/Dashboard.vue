@@ -18,14 +18,14 @@
 			/>
 			<div class="user--goals">
 				<ul>
-					<li v-for="(goal, index) in goals" :key="index" :index="index" ref="goal" :class="{ 'completed' : this.goal.completedToday }">
+					<li v-for="(goal, index) in goals" :key="index" :index="index" ref="goal" :class="{ 'completed' : goal.completedToday }">
 						<div class="user--goals-item">
 							<button 
 								@click="toggleGoalStatus(goals, index, goal.description, goal.completedToday)" 
 								:data-key="goal" 
 								:class="{ 'completed' : goal.completedToday }
 							"></button>
-							{{goal.description}}
+							{{ goal.description }}
 							<button 
 								@click="deleteGoal(index)" 
 								:data-key="goal" 
@@ -50,7 +50,9 @@
 				<div class="user--add-goal-overlay" @click="closeForm">
 				</div>
 			</div>
-			<UserPerformance />
+			<UserPerformance
+				:performance="this.performance"
+			/>
 		</div>
 		<AppFooter />
 	</div>
@@ -137,7 +139,7 @@
 			},
 
 			/**
-			 * DELETE request to database to delete targeted goal.id
+			 * DELETE request to delete targeted goal.id
 			 */
 			async deleteGoal(id) {
 				try {
@@ -150,17 +152,11 @@
 			},
 
 			/**
-			 * Master Function -> PUSH or PUT request to the database to add or modify a day in performance [array]
+			 * PUT request to update goal.completedToday then run updatePerformance()
 			 */
 			async toggleGoalStatus(goals, index, description, completedToday) {
 
-				const 	today = new Date(),
-						todaysMonth = today.getMonth() + 1,
-						todaysYear = today.getFullYear(),
-						todaysDay = today.getDate()
-
 				try {
-					// PUT request to the database to update target goal.completedToday value
 					await axios.put(database + '/goals/' + index + '.json', { description: description, completedToday: !completedToday })
 
 				} catch(e) {
@@ -173,67 +169,17 @@
 					// Calculate todays score
 					this.calculateTodaysScore(goals, completedToday)
 
-					// PUT stats [array]
+					// PUT updated stats into stats [array]
 					this.updateStats()
 
 					// GET updated stats [array]
 					this.getStats()
-				}
 
-				for (let year in this.performance) {
-					if (this.performance[year]["year"] == todaysYear) {
+					// PUT or PUSH updated performance into performance [array]
+					this.updatePerformance(goals, completedToday)
 
-						for (let month in this.performance[year]["months"]) {
-							if(this.performance[year]["months"][month]["id"] == todaysMonth) {
-
-								for (let day in this.performance[year]["months"][month]["days"]) {
-									let dateString = todaysYear + '-' + todaysMonth + '-' + todaysDay
-
-									if (this.performance[year]["months"][month]["days"][day]["date"] === dateString) {
-										/*try {
-											// PUT request to the database to update target performance[year]["months"][month]["days"][day]["score"]
-											let currentDayTarget = 
-												'/performance/' + this.performance[year]["id"] + 
-												'/months/' + this.performance[year]["id"][months]["id"] + 
-												'/days/' + this.performance[year]["months"][month]["days"][day]["id"]
-
-											console.log('Todays score in the db should be: ' + this.score)
-
-											axios.put(database + currentTarget, { 
-												"score"					: score,
-												"totalGoals"			: this.totalGoals,
-												"totalCompletedGoals"	: this.totalCompletedGoals,
-												"id"					: id
-											})
-
-											console.log('Todays score in the db is now: ' + this.performance[year]["months"][month]["days"][day]["score"])
-
-										} catch(e) {
-											console.error(e)
-
-										}*/
-			
-									} else {
-										// 1 push new day into performance[year][month]["days"] [array]
-									}
-
-								}
-
-							} else {
-
-								// 1 push new month in performance[year]["months"] [array]
-								// 2 push new day into performance[year][month]["days"] [array]
-
-							}
-						}
-
-					} else {
-
-						// 1 push new year in performance [array]
-						// 2 push new month in performance[year]["months"] [array]
-						// 3 push new day into performance[year][month]["days"] [array]
-
-					}
+					// GET performance [array]
+					this.getPerformance()
 				}
 			},
 
@@ -311,6 +257,92 @@
 				} catch(e) {
 					console.error(e)
 				}
+			},
+
+			/**
+			 * PUT or PUSH request to update performance [array] depending on the existance of data for today
+			 */
+			async updatePerformance(goals, completedToday) {
+				const 	today = new Date(),
+						todaysMonth = today.getMonth() + 1,
+						todaysYear = today.getFullYear(),
+						todaysDay = today.getDate()
+
+				for (let year in this.performance) {
+					if (this.performance[year]["year"] == todaysYear) {
+
+						for (let month in this.performance[year]["months"]) {
+							if(this.performance[year]["months"][month]["id"] == todaysMonth) {
+
+								for (let day in this.performance[year]["months"][month]["days"]) {
+									let dateString = todaysYear + '-' + todaysMonth + '-' + todaysDay
+									let targetYear = this.performance[year]["id"]
+									let targetMonth = this.performance[year]["months"][month]["id"] - 1
+
+									// For testing purposes, and due to starting at november, targetMonth and targetYear gets reset -- change these next two lines later
+									targetMonth = 0
+									targetYear = 0
+
+									let targetRecord = database + '/performance/' + targetYear + '/months/' + targetMonth + '/days.json'
+
+									this.totalGoals = this.calculateTotalGoals(goals)
+									this.totalGoalsCompleted = this.calculateTodaysCompletedGoals(goals, completedToday)
+
+									try {
+										await axios.put(targetRecord, [
+											{ 
+												"date"					: dateString,
+												"score"					: this.score,
+												"totalGoals"			: this.totalGoals,
+												"totalCompletedGoals"	: this.totalGoalsCompleted
+											}
+										])
+									} catch (e) {
+										console.error(e)
+									}
+
+									if (this.performance[year]["months"][month]["days"][day]["date"] === dateString) {
+										/*let dateString = todaysYear + '-' + todaysMonth + '-' + todaysDay
+										let targetYear = this.performance[year]["id"]
+										let targetMonth = this.performance[year]["months"][month]["id"] - 1
+
+										// For testing purposes, and due to starting at november, targetMonth and targetYear gets reset -- change these next two lines later
+										targetMonth = 0
+										targetYear = 0
+
+										let targetRecord = database + '/performance/' + targetYear + '/months/' + targetMonth + '/days.json'
+
+										await axios.put(targetRecord, { 
+											"date"					: dateString,
+											"score"					: this.score,
+											"totalGoals"			: this.totalGoals,
+											"totalCompletedGoals"	: this.totalCompletedGoals
+										})*/
+			
+									} else {
+										// 1 push new day into performance[year][month]["days"] [array]
+									}
+
+								}
+
+							} else {
+
+								// 1 push new month in performance[year]["months"] [array]
+								// 2 push new day into performance[year][month]["days"] [array]
+
+							}
+						}
+
+					} else {
+
+						// 1 push new year in performance [array]
+						// 2 push new month in performance[year]["months"] [array]
+						// 3 push new day into performance[year][month]["days"] [array]
+
+					}
+				}
+
+				this.getPerformance()
 			},
 
 			/**
@@ -602,21 +634,8 @@
 					width: 100%;
 					border-bottom: 1px solid rgba(255,255,255,.4);
 					position: relative;
-					height: 0;
-					padding: 0 15px;
+					padding: 15px;
 					overflow: hidden;
-					animation: .15s goalItemSlideDown linear forwards
-				}
-
-				@keyframes goalItemSlideDown {
-					0% {
-						height: 0;
-						padding: 0 15px;
-					}
-					100% {
-						height: 55px;
-						padding: 15px;
-					}
 				}
 
 				&:first-of-type {
@@ -689,10 +708,13 @@
 					border: 3px solid #fff;
 					border-radius: 50%;
 					display: inline-block;
-					content: "";
+					position: relative;
+					margin-top: 0;
+					margin-left: 0;
 					margin-bottom: -5px;
 					margin-right: 15px;
 					cursor: pointer;
+					-webkit-appearance: none;
 
 					&:focus {
 						outline: none;
@@ -703,7 +725,7 @@
 						background: #fff;
 						position: relative;
 
-						&:before {
+						&:after {
 							content: '';
 							position: absolute;
 							top: -7px;
@@ -714,12 +736,7 @@
 							border-radius: 50%;
 							display: inline-block;
 							border: 3px solid #fff;
-							content: "";
-							margin-right: 15px;
 							animation: scaleFadeOut .75s linear forwards;
-							display: flex;
-							justify-content: center;
-							align-items: center;
 						}
 					}
 

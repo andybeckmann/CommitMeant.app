@@ -1,8 +1,8 @@
 <template>
 	<div class="user--header">
-		<div class="user--header-profile-picture">
-			<img src="../assets/profile-picture.png">
-			<div class="user--header-profile-picture-status" :class="score"></div>
+		<div class="user--header-avatar">
+			<div class="user--header-avatar-emoji">🐶</div>
+			<div class="user--header-avatar-status" :class="score"></div>
 		</div>
 		<ul>
 			<li>
@@ -38,19 +38,24 @@
 		margin: 15px;
 		display: flex;
 		border: 5px solid #e900ff;
-		padding: 20px;
+		padding: 15px;
 		border-radius: 0 15px 15px 0;
 		margin-left: 0;
 		border-left: 0;
 		background: #fff;
 
-		.user--header-profile-picture {
-			max-width: 75px;
-			max-height: 75px;
+		.user--header-avatar {
+			width: 75px;
+			height: 75px;
 			position: relative;
+			font-size: 75px;
+
+			.user--header-avatar-emoji {
+				margin-top: -10px;
+			}
 		}
 
-		.user--header-profile-picture-status {
+		.user--header-avatar-status {
 			width: 30px;
 			height: 30px;
 			position: absolute;
