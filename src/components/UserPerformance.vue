@@ -10,7 +10,7 @@
 		<ul class="user--performance-years">
 			<li class="user--performance-year" v-for="(year, index) in performance" :key="index" :index="index" :class="{ 'show' : year.isSelectedYear }">
 				<ul :id="year.year">
-					<li v-for="(month, index) in year.months" :key="month.name" :index="index">
+					<li v-for="(month, index) in year.months.slice().reverse()" :key="month.name" :index="index">
 						<h1>{{ month.name }}</h1>
 						<div class="user--performance-data">
 							<ul class="user--performance-data-month">
@@ -25,7 +25,7 @@
 	<div class="user--view-history">
 		<ul>
 			<li class="user--performance-year" v-for="(year, index) in performance" :key="year.year" :index="index">
-				<a href="#" :class="[{ 'active ' : year.isSelectedYear }, 'user--view-history-year']" :data-key="year" @click="selectYear(this.performance.years, year)">{{ year.year }}</a>
+				<a href="#" :class="[{ 'active ' : year.isSelectedYear }, 'user--view-history-year']" :data-key="year" @click="selectYear(performance, year)">{{ year.year }}</a>
 			</li>
 		</ul>
 	</div>
@@ -46,7 +46,7 @@
 			 * Displays selected year
 			 */
 			selectYear(years, year) {
-				for (let i=0; i < this.performance.length; i++) {
+				for (let i in years) {
 					years[i].isSelectedYear = false
 				}
 				year.isSelectedYear = true

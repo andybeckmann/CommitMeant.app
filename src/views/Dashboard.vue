@@ -276,69 +276,40 @@
 
 								for (let day in this.performance[year]["months"][month]["days"]) {
 									let dateString = todaysYear + '-' + todaysMonth + '-' + todaysDay
-									let targetYear = this.performance[year]["id"]
-									let targetMonth = this.performance[year]["months"][month]["id"] - 1
 
-									// For testing purposes, and due to starting at november, targetMonth and targetYear gets reset -- change these next two lines later
-									targetMonth = 0
-									targetYear = 0
-
-									let targetRecord = database + '/performance/' + targetYear + '/months/' + targetMonth + '/days.json'
-
-									this.totalGoals = this.calculateTotalGoals(goals)
-									this.totalGoalsCompleted = this.calculateTodaysCompletedGoals(goals, completedToday)
-
-									try {
-										await axios.put(targetRecord, [
-											{ 
-												"date"					: dateString,
-												"score"					: this.score,
-												"totalGoals"			: this.totalGoals,
-												"totalCompletedGoals"	: this.totalGoalsCompleted
-											}
-										])
-									} catch (e) {
-										console.error(e)
-									}
-
-									if (this.performance[year]["months"][month]["days"][day]["date"] === dateString) {
-										/*let dateString = todaysYear + '-' + todaysMonth + '-' + todaysDay
-										let targetYear = this.performance[year]["id"]
+									if (this.performance[year]["months"][month]["days"][day]["date"] == dateString) {
+										let targetYear = this.performance[year]["id"] - 1
 										let targetMonth = this.performance[year]["months"][month]["id"] - 1
+										let targetDay = todaysDay - 1
+										let targetRecord = database + '/performance/' + targetYear + '/months/' + targetMonth + '/days/' + targetDay + '.json'
 
-										// For testing purposes, and due to starting at november, targetMonth and targetYear gets reset -- change these next two lines later
-										targetMonth = 0
-										targetYear = 0
+										this.totalGoals = this.calculateTotalGoals(goals)
+										this.totalGoalsCompleted = this.calculateTodaysCompletedGoals(goals, completedToday)
 
-										let targetRecord = database + '/performance/' + targetYear + '/months/' + targetMonth + '/days.json'
-
-										await axios.put(targetRecord, { 
-											"date"					: dateString,
-											"score"					: this.score,
-											"totalGoals"			: this.totalGoals,
-											"totalCompletedGoals"	: this.totalCompletedGoals
-										})*/
-			
+										try {
+											await axios.put(targetRecord, { 
+													"date"					: dateString,
+													"score"					: this.score,
+													"totalGoals"			: this.totalGoals,
+													"totalCompletedGoals"	: this.totalGoalsCompleted
+												}
+											)
+										} catch (e) {
+											console.error(e)
+										}
 									} else {
 										// 1 push new day into performance[year][month]["days"] [array]
 									}
-
 								}
-
 							} else {
-
 								// 1 push new month in performance[year]["months"] [array]
 								// 2 push new day into performance[year][month]["days"] [array]
-
 							}
 						}
-
 					} else {
-
 						// 1 push new year in performance [array]
 						// 2 push new month in performance[year]["months"] [array]
 						// 3 push new day into performance[year][month]["days"] [array]
-
 					}
 				}
 

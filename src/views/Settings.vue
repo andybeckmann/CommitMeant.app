@@ -22,7 +22,7 @@
 				<label>Password</label>
 				<input type="password" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;">
 			</div>
-			<div class="user--settings-setting">
+			<div :class="{ 'disabled' : !this.isConfirmationNeeded }" class="user--settings-setting">
 				<label>Confirm password</label>
 				<input type="password" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;">
 			</div>
@@ -65,6 +65,8 @@
 
 		data() {
 			return {
+				isConfirmationNeeded: false,
+
 				avatarEmojis: [
 					{ 
 						id: 1,
@@ -124,7 +126,7 @@
 
 <style scoped lang="scss">
 	.user--settings-setting-disable-flashing-goals {
-		padding: 35px 0;
+		padding: 15px 0;
 		text-align: center;
 	}
 
@@ -148,5 +150,9 @@
 				}
 			}
 		}
+	}
+
+	.disabled {
+		opacity: 0.25;
 	}
 </style>
