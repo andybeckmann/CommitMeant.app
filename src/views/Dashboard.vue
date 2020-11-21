@@ -30,7 +30,7 @@
 								@click="deleteGoal(index)" 
 								:data-key="goal" 
 								class="delete"
-							></button> 
+							>&#10005;</button> 
 						</div>
 					</li>
 				</ul>
@@ -45,7 +45,12 @@
 						v-on:keyup="enableSubmit"
 						@keyup.enter="addGoal"
 					>
-					<button @click="addGoal" :disabled="isAddGoalButtonDisabled">+</button>
+					<button @click="addGoal" :disabled="isAddGoalButtonDisabled" class="user--add-goal-form-button" :class="{ 'active' : isAddGoalButtonPressed }">
+						<div class="icon--toggle">
+							<div class="user--add-goal-form-button-top"></div>
+							<div class="user--add-goal-form-button-bottom"></div>
+						</div>
+					</button>
 				</div>
 				<div class="user--add-goal-overlay" @click="closeForm">
 				</div>
@@ -268,49 +273,85 @@
 						todaysYear = today.getFullYear(),
 						todaysDay = today.getDate()
 
+				let recordExists = false
+				let recordYear = null
+				let recordMonth = null
+
 				for (let year in this.performance) {
 					if (this.performance[year]["year"] == todaysYear) {
+						recordYear = this.performance[year]["id"] - 1
 
 						for (let month in this.performance[year]["months"]) {
 							if(this.performance[year]["months"][month]["id"] == todaysMonth) {
+								recordMonth = this.performance[year]["months"][month]["id"] - 1
 
 								for (let day in this.performance[year]["months"][month]["days"]) {
 									let dateString = todaysYear + '-' + todaysMonth + '-' + todaysDay
-
 									if (this.performance[year]["months"][month]["days"][day]["date"] == dateString) {
-										let targetYear = this.performance[year]["id"] - 1
-										let targetMonth = this.performance[year]["months"][month]["id"] - 1
-										let targetDay = todaysDay - 1
-										let targetRecord = database + '/performance/' + targetYear + '/months/' + targetMonth + '/days/' + targetDay + '.json'
-
-										this.totalGoals = this.calculateTotalGoals(goals)
-										this.totalGoalsCompleted = this.calculateTodaysCompletedGoals(goals, completedToday)
-
-										try {
-											await axios.put(targetRecord, { 
-													"date"					: dateString,
-													"score"					: this.score,
-													"totalGoals"			: this.totalGoals,
-													"totalCompletedGoals"	: this.totalGoalsCompleted
-												}
-											)
-										} catch (e) {
-											console.error(e)
-										}
-									} else {
-										// 1 push new day into performance[year][month]["days"] [array]
+										recordExists = true
 									}
 								}
-							} else {
-								// 1 push new month in performance[year]["months"] [array]
-								// 2 push new day into performance[year][month]["days"] [array]
 							}
 						}
-					} else {
-						// 1 push new year in performance [array]
-						// 2 push new month in performance[year]["months"] [array]
-						// 3 push new day into performance[year][month]["days"] [array]
 					}
+				}
+
+				let dateString = todaysYear + '-' + todaysMonth + '-' + todaysDay
+				let targetYear = recordYear
+				let targetMonth = recordMonth
+				let targetDay = todaysDay - 1
+
+				if (recordExists == true) {
+
+					let targetRecord = database + '/performance/' + targetYear + '/months/' + targetMonth + '/days/' + targetDay + '.json'
+					this.totalGoals = this.calculateTotalGoals(goals)
+					this.totalGoalsCompleted = this.calculateTodaysCompletedGoals(goals, completedToday)
+
+					try {
+						await axios.put(targetRecord, { 
+								"date"					: dateString,
+								"id"					: todaysDay,
+								"score"					: this.score,
+								"totalGoals"			: this.totalGoals,
+								"totalCompletedGoals"	: this.totalGoalsCompleted
+							}
+						)
+					} catch (e) {
+						console.error(e)
+					}
+				} else if (recordExists == false) {
+					
+					if (todaysDay == 1) {
+
+						if (todaysMonth == 1) {
+
+							// 1 post a new month into performance
+						}
+
+						// 2 post a new month into performance[year]["months"]
+					}
+						
+					// 3 push new day in performance[year]["months"][month]["days"]
+					
+					let targetRecord = database + '/performance/' + targetYear + '/months/' + targetMonth + '/days.json'
+
+					try {
+						const res = await axios.post(targetRecord, { 
+								"date"					: dateString,
+								"id"					: todaysDay,
+								"score"					: this.score,
+								"totalGoals"			: this.totalGoals,
+								"totalCompletedGoals"	: this.totalGoalsCompleted
+							}
+						)
+						console.log(res.data)
+
+					} catch (e) {
+						console.error(e)
+						
+					}
+
+					recordExists = true
 				}
 
 				this.getPerformance()
@@ -542,7 +583,7 @@
 
 			&:checked + label:before {
 				background: #e900ff;
-				border: 4px solid #fff;
+				border: 3px solid #fff;
 				width: 18px;
 				height: 18px;
 			}
@@ -607,6 +648,7 @@
 					position: relative;
 					padding: 15px;
 					overflow: hidden;
+					display: flex;
 				}
 
 				&:first-of-type {
@@ -678,7 +720,7 @@
 					background: 0 0;
 					border: 3px solid #fff;
 					border-radius: 50%;
-					display: inline-block;
+					display: block;
 					position: relative;
 					margin-top: 0;
 					margin-left: 0;
@@ -726,22 +768,9 @@
 					&.delete {
 						border: 0;
 						position: absolute;
-						width: 40px;
-						height: 40px;
-						top: 0;
+						top: 13px;
 						right: 0;
-
-						&:before {
-							content: '+';
-							transform: rotate(45deg);
-							font-size: 32px;
-							color: rgba(255, 255, 255, 0.7);
-							position: absolute;
-							top: 10px;
-							right: 5px;
-							display: block;
-
-						}
+						color: #fff;
 					}
 				}
 			}
@@ -780,7 +809,7 @@
 
 		input {
 			width: 100%;
-			padding: 20px 25px;
+			padding: 14px 15px 14px 15px;
 			font-size: 24px;
 			border: 0;
 			border-bottom: 5px solid #e900ff;
@@ -797,25 +826,54 @@
 			}
 		}
 
-		button {
+		.user--add-goal-form-button {
 			position: absolute;
 			z-index: 3;
-			right: 15px;
-			top: 12px;
+			top: 0;
+			right: 0;
 			-webkit-appearance: none;
 			border: 0;
-			outline: none;
-			border-radius: 50%;
+			background: #ccc;
+			width: 55px;
+			height: 55px;
+			padding: 15px;
 			background: #e900ff;
-			padding: 4px 12px;
-			color: #fff;
-			font-size: 30px;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			border: none;
+			outline: none;
+			border-radius: 0;
+			cursor: pointer;
 
 			&:disabled {
-				padding: 2px 10px;
+				background: #ccc;
+			}
+
+			&:focus {
+				outline: none;
+			}
+
+			.user--add-goal-form-button-top {
+				transform: rotate(0deg);
+				bottom: -4px;
+				position: relative;
+				height: 5px;
+				width: 25px;
 				background: #fff;
-				color: #eee;
-				border: 3px solid #eee;
+				margin-bottom: 3px;
+				border-radius: 10px;
+			}
+
+			.user--add-goal-form-button-bottom {
+				transform: rotate(90deg);
+				top: -4px;
+				position: relative;
+				height: 5px;
+				width: 25px;
+				background: #fff;
+				margin-bottom: 3px;
+				border-radius: 10px;
 			}
 		}
 
