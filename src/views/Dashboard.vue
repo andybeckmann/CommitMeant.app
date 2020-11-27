@@ -265,6 +265,38 @@
 			},
 
 			/**
+			 * POST blank days to performance[year][month]
+			 */
+			// IN PROGRESS
+			async fillPerformanceGap(targetRecord, dateString, totalDaysRecorded, todaysDay) {
+
+				totalDaysRecorded += 1
+
+				if (todaysDay != totalDaysRecorded) {
+					let gap = todaysDay - totalDaysRecorded
+
+					console.log('The gap is: ' + gap)
+
+					for (let i=0; i < gap; i++) {
+						let idValue = totalDaysRecorded + i
+
+						try {
+							await axios.post(targetRecord, { 
+									"date"					: dateString,
+									"id"					: idValue,
+									"score"					: 'zero',
+									"totalGoals"			: 0,
+									"totalCompletedGoals"	: 0
+								}
+							)
+						} catch(e) {
+							console.error(e)
+						}
+					}
+				}
+			},
+
+			/**
 			 * PUT or PUSH request to update performance [array] depending on the existance of data for today
 			 */
 			async updatePerformance(goals, completedToday) {
@@ -276,6 +308,7 @@
 				let recordExists = false
 				let recordYear = null
 				let recordMonth = null
+				let totalDaysRecorded = 0
 
 				for (let year in this.performance) {
 					if (this.performance[year]["year"] == todaysYear) {
@@ -287,6 +320,8 @@
 
 								for (let day in this.performance[year]["months"][month]["days"]) {
 									let dateString = todaysYear + '-' + todaysMonth + '-' + todaysDay
+									totalDaysRecorded += 1
+
 									if (this.performance[year]["months"][month]["days"][day]["date"] == dateString) {
 										recordExists = true
 									}
@@ -325,18 +360,21 @@
 
 						if (todaysMonth == 1) {
 
-							// 1 post a new month into performance
+							// 1 POST a new month into performance
 						}
 
-						// 2 post a new month into performance[year]["months"]
+						// 2 POST a new month into performance[year]["months"]
 					}
-						
-					// 3 push new day in performance[year]["months"][month]["days"]
-					
+
+					// 3 POST new day in performance[year]["months"][month]["days"]
+
 					let targetRecord = database + '/performance/' + targetYear + '/months/' + targetMonth + '/days.json'
 
+					// But first, if there are any gaps, populate the target days array with scores of 0
+					console.log(this.fillPerformanceGap(targetRecord, dateString, totalDaysRecorded, todaysDay))
+
 					try {
-						const res = await axios.post(targetRecord, { 
+						await axios.post(targetRecord, { 
 								"date"					: dateString,
 								"id"					: todaysDay,
 								"score"					: this.score,
@@ -344,7 +382,6 @@
 								"totalCompletedGoals"	: this.totalGoalsCompleted
 							}
 						)
-						console.log(res.data)
 
 					} catch (e) {
 						console.error(e)
@@ -639,6 +676,7 @@
 
 			li {
 				animation: completedTask 1.5s infinite;
+				line-height: 25px;
 
 				.user--goals-item {
 					color: #fff;
@@ -646,7 +684,7 @@
 					width: 100%;
 					border-bottom: 1px solid rgba(255,255,255,.4);
 					position: relative;
-					padding: 15px;
+					padding: 20px;
 					overflow: hidden;
 					display: flex;
 				}
@@ -715,8 +753,8 @@
 				}
 
 				button {
-					width: 24px;
-					height: 24px;
+					width: 25px;
+					height: 25px;
 					background: 0 0;
 					border: 3px solid #fff;
 					border-radius: 50%;
@@ -724,8 +762,7 @@
 					position: relative;
 					margin-top: 0;
 					margin-left: 0;
-					margin-bottom: -5px;
-					margin-right: 15px;
+					margin-right: 20px;
 					cursor: pointer;
 					-webkit-appearance: none;
 
@@ -768,9 +805,10 @@
 					&.delete {
 						border: 0;
 						position: absolute;
-						top: 13px;
+						top: 20px;
 						right: 0;
 						color: #fff;
+						font-size: 20px;
 					}
 				}
 			}
@@ -782,7 +820,7 @@
 		width: 100%;
 		height: 100%;
 		display: none;
-		top: 56px;
+		top: 55px;
 		left: 0;
 
 		&.show {
@@ -809,8 +847,8 @@
 
 		input {
 			width: 100%;
-			padding: 14px 15px 14px 15px;
-			font-size: 24px;
+			padding: 15px 15px 14px 15px;
+			font-size: 22px;
 			border: 0;
 			border-bottom: 5px solid #e900ff;
 			position: relative;
@@ -822,7 +860,7 @@
 
 			&:focus {
 				outline: none;
-				border-bototm: 5px solid #9703fa;
+				border-bottom: 5px solid #9703fa;
 			}
 		}
 
@@ -880,7 +918,6 @@
 		.user--add-goal-form-fields {
 			position: relative;
 			height: 0;
-			overflow: hidden;
 		}
 
 		.user--add-goal-overlay {
