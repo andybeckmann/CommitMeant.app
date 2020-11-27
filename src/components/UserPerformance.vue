@@ -14,6 +14,7 @@
 						<h1>{{ month.name }}</h1>
 						<div class="user--performance-data">
 							<ul class="user--performance-data-month">
+								<li v-for="padding in month.padding" :key="padding" class="blank"></li>
 								<li v-for="(day, index) in month.days" :key="day.date" :index="index" :class="day.score"></li>
 							</ul>
 						</div>
@@ -140,7 +141,7 @@
 			ul {
 				margin: 0;
 				padding: 0;
-				width: 130px;
+				width: 150px;
 				height: 182px;
 				list-style: none;
 				display: flex;
@@ -150,7 +151,7 @@
 					width: 25px;
 					height: 25px;
 					background: #fff;
-					border: 4px dashed #cccccc;
+					border: 3px dashed #cccccc;
 					border-radius: 50%;
 					margin-right: 1px;
 					margin-bottom: 1px;
@@ -164,6 +165,12 @@
 					// 100% Daily Goals Completed
 					&.onehundred {
 						background: #9403fa;
+						border: none;
+					}
+
+					// Blank days for padding
+					&.blank {
+						background: #fff;
 						border: none;
 					}
 				}
