@@ -49,10 +49,9 @@
 			height: 75px;
 			position: relative;
 			font-size: 65px;
-			background: #eee;
+			background: #ccc;
 			border-radius: 50%;
-			padding: 3px;
-			border: 2px solid #ccc;
+			padding: 5px;
 
 			.user--header-avatar-emoji {
 				margin-top: -10px;
