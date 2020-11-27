@@ -105,7 +105,7 @@
 
 			.app--main-menu-toggle-bottom {
 				transform: rotate(45deg);
-				top: -4px;
+				top: -5px;
 				position: relative;
 			}
 		}
