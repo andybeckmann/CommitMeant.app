@@ -2,7 +2,7 @@
 
 A daily habit tracker, I think...
 
-##Screenshots
+## Screenshots
 
 ![Screenshot](/screenshot.png?raw=true)
 
