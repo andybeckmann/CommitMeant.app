@@ -2,22 +2,11 @@
 
 A daily habit tracker, I think...
 
-## Instructions
-```
-npm install
-```
+##Screenshots
 
-### Compile for development
-```
-npm run serve
-```
+![Screenshot](/screenshot.png?raw=true)
 
-### Compile for production
-```
-npm run build
-```
-
-## Tasks remaining
+## Tasks
 
 - [x] Ability to add goals to a list
 - [x] Ability to mark listed goals as complete
