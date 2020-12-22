@@ -49,7 +49,7 @@
 			height: 75px;
 			position: relative;
 			font-size: 65px;
-			background: #ccc;
+			background: #eee;
 			border-radius: 50%;
 			padding: 5px;
 
