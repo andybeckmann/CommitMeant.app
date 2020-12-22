@@ -200,7 +200,7 @@
 		.user--view-history-year {
 			text-decoration: none;
 			padding: 8px 15px 10px;
-			border-radius: 0 20px 20px 20px;
+			border-radius: 25px;
 			margin-right: 5px;
 			display: inline-block;
 			color: rgba(255, 255, 255,0.5);
