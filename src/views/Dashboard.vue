@@ -10,6 +10,7 @@
 				</div>
 			</button>
 		</div>
+		<div v-if="this.achievement" class="user--achievement">100%<br />COMPLETE</div>
 		<div class="user">
 			<UserHeader 
 				:score="this.stats.score" 
@@ -392,6 +393,16 @@
 				}
 
 				this.getPerformance()
+
+				if (this.score == 'onehundred') {
+					this.achievement = true
+					let achievementInterval = setTimeout(() => {
+						this.achievement = false
+						clearInterval(achievementInterval)
+					}, 2500)
+				} else {
+					this.achievement = false
+				}
 			},
 
 			/**
@@ -435,6 +446,9 @@
 				isAddGoalFormFilled: false,
 				isAddGoalButtonDisabled: true,
 				isAddGoalButtonPressed: false,
+
+				// Achievement messages
+				achievement: false,
 
 				/**
 				 * Initial stats [array] data
@@ -658,7 +672,43 @@
 		}
 	}
 
-	.user--goals{
+	.user--achievement {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		top: 0;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		z-index: 3;
+		font-size: 34px;
+		animation: 2.5s achievementFadeOut linear forwards;
+		opacity: 0;
+		background: rgba(0,0,0,0.75);
+		color: #fff;
+		font-weight: bold;
+		transform: scale(1);
+		text-align: center;
+	}
+
+	@keyframes achievementFadeOut {
+		0% {
+			opacity: 0;
+			transform: scale(1);
+		}
+		50% {
+			opacity: 1;
+		}
+		80% {
+			opacity: 1;
+		}
+		100% {
+			opacity: 0;
+			transform: scale(1.5);
+		}
+	}
+
+	.user--goals {
 		background: linear-gradient(180deg, #e900ff, #9703fa);
 		border-radius: 15px;
 		padding: 0;
