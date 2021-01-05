@@ -10,7 +10,61 @@
 				</div>
 			</button>
 		</div>
-		<div v-if="this.achievement" class="user--achievement">100%<br />COMPLETE</div>
+		<div v-if="this.achievement" class="user--achievement">
+			<div class="confetti animate">
+				<div class="confetti-piece"></div>
+				<div class="confetti-piece"></div>
+				<div class="confetti-piece"></div>
+				<div class="confetti-piece"></div>
+				<div class="confetti-piece"></div>
+				<div class="confetti-piece"></div>
+				<div class="confetti-piece"></div>
+				<div class="confetti-piece"></div>
+				<div class="confetti-piece"></div>
+				<div class="confetti-piece"></div>
+				<div class="confetti-piece"></div>
+				<div class="confetti-piece"></div>
+				<div class="confetti-piece"></div>
+				<div class="confetti-piece"></div>
+				<div class="confetti-piece"></div>
+				<div class="confetti-piece"></div>
+				<div class="confetti-piece"></div>
+				<div class="confetti-piece"></div>
+				<div class="confetti-piece"></div>
+				<div class="confetti-piece"></div>
+				<div class="confetti-piece"></div>
+				<div class="confetti-piece"></div>
+				<div class="confetti-piece"></div>
+				<div class="confetti-piece"></div>
+				<div class="confetti-piece"></div>
+				<div class="confetti-piece"></div>
+				<div class="confetti-piece"></div>
+				<div class="confetti-piece"></div>
+				<div class="confetti-piece"></div>
+				<div class="confetti-piece"></div>
+				<div class="confetti-piece"></div>
+				<div class="confetti-piece"></div>
+				<div class="confetti-piece"></div>
+				<div class="confetti-piece"></div>
+				<div class="confetti-piece"></div>
+				<div class="confetti-piece"></div>
+				<div class="confetti-piece"></div>
+				<div class="confetti-piece"></div>
+				<div class="confetti-piece"></div>
+				<div class="confetti-piece"></div>
+				<div class="confetti-piece"></div>
+				<div class="confetti-piece"></div>
+				<div class="confetti-piece"></div>
+				<div class="confetti-piece"></div>
+				<div class="confetti-piece"></div>
+				<div class="confetti-piece"></div>
+				<div class="confetti-piece"></div>
+				<div class="confetti-piece"></div>
+				<div class="confetti-piece"></div>
+				<div class="confetti-piece"></div>
+			</div>
+			100%<br />COMPLETE
+		</div>
 		<div class="user">
 			<UserHeader 
 				:score="this.stats.score" 
@@ -682,13 +736,151 @@
 		align-items: center;
 		z-index: 3;
 		font-size: 34px;
-		animation: 2.5s achievementFadeOut linear forwards;
+		animation: 1.5s achievementFadeOut linear forwards;
 		opacity: 0;
-		background: rgba(0,0,0,0.75);
+		//background: rgba(146,22,244,.25);
 		color: #fff;
 		font-weight: bold;
 		transform: scale(1);
 		text-align: center;
+		text-shadow: 2px 2px #8f16f4;
+
+		.confetti {
+			position: absolute;
+		}
+
+		.confetti .confetti-piece {
+			position: absolute;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			display: block;
+			left: 0;
+			top: 0;
+			width: 9px;
+			height: 9px;
+			border-radius: 50%;
+			opacity: 0;
+		}
+
+		.confetti.animate .confetti-piece{
+			animation: confettiPop 1.5s linear forwards;
+		}
+
+		@keyframes confettiPop {
+			0% {
+				opacity: 0;
+				transform: translate3d(0, 0, 0);
+			}
+
+			1% {
+				opacity: 1;
+			}
+
+			100% {
+				opacity: 0;
+			}
+		}
+
+		.confetti .confetti-piece:nth-of-type(1) {
+			transform: translate3d(90px, 30px, 0);
+			background: #8f16f4;
+		}
+
+		.confetti .confetti-piece:nth-of-type(2) {
+			transform: translate3d(-30px, 10px, 0);
+			background: #bb8adb;
+		}
+
+		.confetti .confetti-piece:nth-of-type(3) {
+			transform: translate3d(-60px, -40px, 0);
+			background: #8f16f4;
+		}
+
+		.confetti .confetti-piece:nth-of-type(4) {
+			transform: translate3d(75px, 30px, 0);
+			background: #bb8adb;
+		}
+
+		.confetti .confetti-piece:nth-of-type(5) {
+			transform: translate3d(45px, 90px, 0);
+			background: #8f16f4;
+		}
+
+		.confetti .confetti-piece:nth-of-type(6) {
+			transform: translate3d(25px, 45px, 0);
+			background: #bb8adb;
+		}
+
+		.confetti .confetti-piece:nth-of-type(7) {
+			transform: translate3d(15px, 35px, 0);
+			background: #bb8adb;
+		}
+
+		.confetti .confetti-piece:nth-of-type(8) {
+			transform: translate3d(65px, 30px, 0);
+			background: #8f16f4;
+		}
+
+		.confetti .confetti-piece:nth-of-type(9) {
+			transform: translate3d(20px, 80px, 0);
+			background: #bb8adb;
+		}
+
+		.confetti .confetti-piece:nth-of-type(10) {
+			transform: translate3d(45px, 75px, 0);
+			background: #8f16f4;
+		}
+
+		.confetti .confetti-piece:nth-of-type(11) {
+			transform: translate3d(-65px, 25px, 0);
+			background: #8f16f4;
+		}
+
+		.confetti .confetti-piece:nth-of-type(12) {
+			transform: translate3d(45px, -50px, 0);
+			background: #bb8adb;
+		}
+
+		.confetti .confetti-piece:nth-of-type(13) {
+			transform: translate3d(-45px, 90px, 0);
+			background: #bb8adb;
+		}
+
+		.confetti .confetti-piece:nth-of-type(14) {
+			transform: translate3d(45px, 20px, 0);
+			background: #8f16f4;
+		}
+
+		.confetti .confetti-piece:nth-of-type(15) {
+			transform: translate3d(-45px, -40px, 0);
+			background: #bb8adb;
+		}
+
+		.confetti .confetti-piece:nth-of-type(16) {
+			transform: translate3d(-45px, 90px, 0);
+			background: #8f16f4;
+		}
+
+		.confetti .confetti-piece:nth-of-type(17) {
+			transform: translate3d(-30px, 50px, 0);
+			background: #bb8adb;
+		}
+
+		.confetti .confetti-piece:nth-of-type(18) {
+			transform: translate3d(45px, -90px, 0);
+			background: #8f16f4;
+		}
+
+		.confetti .confetti-piece:nth-of-type(19) {
+			transform: translate3d(60px, 90px, 0);
+			background: #bb8adb;
+		}
+
+		.confetti .confetti-piece:nth-of-type(20) {
+			transform: translate3d(-75px, 80px, 0);
+			background: #bb8adb;
+		}
 	}
 
 	@keyframes achievementFadeOut {
