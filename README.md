@@ -1,6 +1,6 @@
 # CommitMeant.app
 
-A daily habit tracker built with Vue 3 and Firebase.
+A daily habit tracker built with Vue 3 and Firebase
 
 ## Screenshots
 
